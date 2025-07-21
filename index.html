@@ -1930,7 +1930,7 @@
                 let sampledColorsHTML = '<div style="display: flex; gap: 4px; margin-bottom: 8px; margin-top: 5px;">';
                 dominantSampleColors.forEach(rgb => {
                     const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
-                    sampledColorsHTML += `<div class="palette-color-swatch" title="${hex}" style="width:25px; height:25px; background-color: ${hex}; cursor:default;"></div>`;
+                    sampledColorsHTML += `<div class="palette-color-swatch" title="${hex}" data-hex="${hex} "style="width:25px; height:25px; background-color: ${hex}; cursor:default;"></div>`;
                 });
                 sampledColorsHTML += '</div>';
 
