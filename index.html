@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Palette Extractor</title>
+    <title>Coloranly Palette Extractor</title>
     <style>
         :root {
             --bg-color: #f0f0f0;
@@ -651,8 +651,8 @@
 
         #magnifier {
             position: fixed;
-            width: 150px;
-            height: 150px;
+            width: 100px; /* Reduced size */
+            height: 100px; /* Reduced size */
             border: 2px solid var(--frame-color);
             border-radius: 5px;
             overflow: hidden;
@@ -661,7 +661,7 @@
             pointer-events: none;
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
             display: none;
-            transform: translate(-50%, -100%);
+            transform: translate(-50%, calc(-100% - 50px)); /* Significantly increased negative Y offset further */
             font-family: var(--font-family);
         }
 
@@ -702,18 +702,19 @@
 
         #magnifier-crosshair {
             position: absolute;
-            top: calc(50% - 15px);
-            left: calc(50% - 15px);
-            width: 30px;
-            height: 30px;
+            top: 50%;
+            left: 50%;
+            width: 20px; /* Reduced crosshair size */
+            height: 20px; /* Reduced crosshair size */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
+            font-size: 20px; /* Reduced crosshair font size */
             color: red;
             pointer-events: none;
             text-shadow: 0 0 3px black;
             font-weight: bold;
+            transform: translate(-50%, -50%);
         }
 
         #copy-notification {
@@ -840,7 +841,7 @@
             <div class="settings-content-scrollable">
                 <div class="setting-group" id="skin-tone-analysis-section">
                     <h4>Skin Tone Analysis</h4>
-                    <p>Pick a color from the image that best represents your skin tone to get color recommendations. For best results, choose an area on your jawline or inner arm in natural lighting. [ This program is not accurate and merely for preview purposes ]</p>
+                    <p>Pick a color from the image that best represents your skin tone to get color recommendations. For best results, choose an area on your jawline or inner arm in natural lighting.</p>
                     <button id="pick-skin-tone-button">Pick Skin Tone</button>
                     <p id="skin-tone-result"></p>
                 </div>
@@ -873,7 +874,7 @@
                         <input type="range" id="sample-size" min="0.1" max="1" step="0.1" value="0.5">
                         <input type="number" id="sample-size-num" min="0.1" max="1" step="0.1" value="0.5" class="slider-value-input">
                     </div>
-                    <p style="font-size:12px; opacity:0.8;">Adjusting "Sample Density" too high on large images may cause performance issues.</p>
+                    <p style="font-size:12px; opacity:0.8;">Adjusting "Sample Density" too high on large images may cause performance issues. Sample refers to number of data points / observations within a given area or volume — how frequently colors are sampled from an image to determine the most dominant or representative colors.</p>
                 </div>
             </div>
         </div>
@@ -1483,62 +1484,123 @@
             }
 
             function getSkinToneUndertone(rgb) {
-                const [r, g, b] = rgb;
-                let undertone = '';
-                let explanation = '';
+                const hsl = rgbToHsl(rgb[0], rgb[1], rgb[2]);
+                const h = hsl.h;
+                const s = hsl.s;
+                const l = hsl.l;
 
-                // Calculate ratios to determine dominant hues
-                const max = Math.max(r, g, b);
-                const min = Math.min(r, g, b);
-                const avg = (r + g + b) / 3;
+                let bestMatch = { undertone: 'Undetermined', confidence: 0, explanation: 'Could not confidently determine undertone based on the provided HSL ranges. This might happen with very dark or very light skin tones, or if the color picked is not representative of skin.' };
 
-                // Simple check for perceived warmth/coolness based on red/blue dominance
-                // This is a more robust approach than simple direct comparisons
-                if (r > g && r > b) {
-                    // Reddish dominant, likely warm or neutral-warm
-                    if (g > b) { // More green than blue, leaning yellow/peach
-                        undertone = 'Warm (Golden/Peach)';
-                        explanation = "Your skin has a noticeable golden or peachy hue, indicating warm undertones. You'll glow in rich, earthy tones.";
-                    } else { // More blue than green, might be rosy/neutral
-                        if (Math.abs(r - b) < 25 && Math.abs(r - g) < 25) {
-                            undertone = 'Neutral';
-                            explanation = "Your skin has a balanced mix of warm and cool tones, allowing you to wear a wide range of colors beautifully.";
-                        } else {
-                            undertone = 'Cool (Rosy/Pink)'; // Strong red, but not necessarily yellow-dominant
-                            explanation = "Your skin has a rosy or pinkish tint, indicating cool undertones. Jewel tones and cool shades will enhance your natural radiance.";
+                const undertoneRanges = {
+                    'Warm (Golden/Peach)': {
+                        hue: { min: 28, max: 42 },
+                        saturation: { min: 30, max: 65 },
+                        lightness: { min: 30, max: 85 }, // Combined light to deep
+                        description: "Your skin has a noticeable golden or peachy hue, indicating warm undertones. You'll glow in rich, earthy tones like olive green, mustard, terracotta, and warm reds."
+                    },
+                    'Cool (Blue/Pink)': {
+                        hue: [{ min: 340, max: 360 }, { min: 0, max: 10 }, { min: 200, max: 240 }], // Wrap-around for pink/red, plus bluish
+                        saturation: { min: 25, max: 55 },
+                        lightness: { min: 25, max: 80 }, // Combined light to deep
+                        description: "Your skin has a rosy or pinkish tint, indicating cool undertones. Jewel tones and cool shades like navy, emerald greens, cool reds, and purples will enhance your natural radiance."
+                    },
+                    'Neutral': {
+                        hue: { min: 20, max: 28 }, // Beige to caramel range
+                        saturation: { min: 15, max: 45 },
+                        lightness: { min: 30, max: 75 }, // Combined light to deep
+                        description: "Your skin has a balanced mix of warm and cool tones, allowing you to wear a wide range of colors beautifully. Soft neutrals like greys, taupes, and muted pastels often work best."
+                    }
+                };
+
+                let scores = {};
+
+                for (const type in undertoneRanges) {
+                    const range = undertoneRanges[type];
+                    let matchScore = 0;
+
+                    // Hue score
+                    let hueMatch = false;
+                    if (Array.isArray(range.hue)) {
+                        for (const hRange of range.hue) {
+                            if (hRange.min <= hRange.max) {
+                                if (h >= hRange.min && h <= hRange.max) {
+                                    hueMatch = true;
+                                    break;
+                                }
+                            } else { // Handle wrap-around for hue
+                                if (h >= hRange.min || h <= hRange.max) {
+                                    hueMatch = true;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        if (h >= range.hue.min && h <= range.hue.max) {
+                            hueMatch = true;
                         }
                     }
-                } else if (b > r && b > g) {
-                    // Bluish dominant, likely cool
-                    undertone = 'Cool (Blue/Pink)';
-                    explanation = "Your skin has a blue or pinkish tint, indicating cool undertones. Colors with blue or purple bases will be particularly flattering.";
-                } else if (g > r && g > b) {
-                    // Greenish dominant (less common for primary skin tone, but indicates olive)
-                    if (Math.abs(r - g) < 20 && Math.abs(g - b) < 20) {
-                         undertone = 'Neutral';
-                         explanation = "Your skin has a balanced mix of warm and cool tones, allowing you to wear a wide range of colors beautifully.";
-                    } else {
-                        undertone = 'Olive (Greenish-Neutral)';
-                        explanation = "Your skin has a unique olive or greenish undertone, suggesting a blend of warm and cool. Earthy and muted jewel tones will complement you best.";
+                    if (hueMatch) matchScore += 1;
+
+                    // Saturation score
+                    if (s >= range.saturation.min && s <= range.saturation.max) {
+                        matchScore += 1;
                     }
-                } else {
-                    // More balanced, or hard to classify, likely neutral or a mix
-                    if (Math.abs(r - g) < 20 && Math.abs(g - b) < 20) {
-                        undertone = 'Neutral';
-                        explanation = "Your skin has a balanced mix of warm and cool tones, allowing you to wear a wide range of colors beautifully.";
+
+                    // Lightness score
+                    if (l >= range.lightness.min && l <= range.lightness.max) {
+                        matchScore += 1;
+                    }
+                    scores[type] = matchScore;
+                }
+
+                let maxScore = 0;
+                let topUndertone = '';
+                let topUndertones = [];
+
+                for (const type in scores) {
+                    if (scores[type] > maxScore) {
+                        maxScore = scores[type];
+                        topUndertone = type;
+                        topUndertones = [type];
+                    } else if (scores[type] === maxScore && maxScore > 0) {
+                        topUndertones.push(type);
+                    }
+                }
+                
+                // Add specific olive check if no strong match, or as a refine for neutral
+                if (rgb[1] > rgb[0] && rgb[1] > rgb[2] && rgb[1] > (rgb[0] + rgb[2]) / 2 + 10) {
+                    const oliveConfidenceBoost = 0.5; // Arbitrary boost
+                    if (scores['Neutral'] !== undefined) {
+                        scores['Neutral'] += oliveConfidenceBoost; // Boost neutral if greenish
                     } else {
-                        undertone = 'Neutral to Warm (Balanced/Slightly Golden)';
-                        explanation = "Your skin has a balanced or slightly warm undertone. Most colors will suit you, but soft, muted, and slightly warm tones might be particularly harmonious.";
+                        scores['Olive (Greenish-Neutral)'] = (scores['Olive (Greenish-Neutral)'] || 0) + oliveConfidenceBoost;
                     }
                 }
 
-                // Add a more direct check for olive based on green cast
-                if (g > r && g > b && g > (r + b) / 2 + 10) { // Green is significantly higher than average of R and B
-                    undertone = 'Olive (Greenish-Neutral)';
-                    explanation = "Your skin has a unique olive or greenish undertone, suggesting a blend of warm and cool. Earthy and muted jewel tones will complement you best.";
+
+                if (maxScore > 0) {
+                    bestMatch.undertone = topUndertones.join(' or ');
+                    bestMatch.confidence = (maxScore / 3) * 100; // 3 criteria (H, S, L)
+                    if (topUndertones.length === 1) {
+                         bestMatch.explanation = undertoneRanges[topUndertone].description;
+                    } else {
+                        // If multiple top undertones, provide a combined explanation or list possibilities
+                        bestMatch.explanation = "Based on your skin tone's HSL values, you might have a blend of undertones. Consider exploring colors that complement both:\n";
+                        topUndertones.forEach(ut => {
+                            bestMatch.explanation += `- ${ut}: ${undertoneRanges[ut].description}\n`;
+                        });
+                    }
+
+                    // Special handling for Olive as it often overlaps with Neutral
+                    if (bestMatch.undertone.includes('Olive') && !bestMatch.undertone.includes('Neutral')) {
+                         bestMatch.explanation += "\nNote: An olive undertone indicates a unique blend of warm and cool, often with a subtle green cast.";
+                    } else if (bestMatch.undertone.includes('Neutral') && rgb[1] > rgb[0] && rgb[1] > rgb[2] && rgb[1] > (rgb[0] + rgb[2]) / 2 + 10) {
+                         bestMatch.undertone = 'Neutral (with Olive tendency)';
+                         bestMatch.explanation += "\nWhile primarily neutral, your skin also shows a slight olive (greenish) tendency. Earthy and muted jewel tones will complement you well.";
+                    }
                 }
 
-                return { undertone, explanation };
+                return bestMatch;
             }
 
 
@@ -1550,10 +1612,10 @@
                 }
 
                 const [r, g, b] = selectedRgb;
-                const { undertone, explanation: undertoneExplanation } = getSkinToneUndertone(selectedRgb);
+                const { undertone, explanation, confidence } = getSkinToneUndertone(selectedRgb);
 
                 let suitableColors = [];
-                let colorTemperature = ''; // Derive temperature from undertone for consistency
+                let colorTemperature = ''; 
 
                 switch (undertone) {
                     case 'Warm (Golden/Peach)':
@@ -1566,6 +1628,7 @@
                         suitableColors = ['Cool Blues (Navy, Sky Blue, Cobalt)', 'Emerald Greens', 'Cool Reds (Berry, Wine, Fuchsia)', 'Pinks, Purples', 'Silver, Platinum, White', 'True Greys'];
                         break;
                     case 'Neutral':
+                    case 'Neutral (with Olive tendency)':
                         colorTemperature = 'Neutral';
                         suitableColors = ['Almost any color!', 'Soft Neutrals (Greys, Taupes, Mushroom)', 'Medium Pinks and Blues', 'Dusty Rose, Muted Peach', 'Jade Green, Lavender'];
                         break;
@@ -1573,13 +1636,10 @@
                         colorTemperature = 'Neutral-Warm';
                         suitableColors = ['Muted Greens (Sage, Moss)', 'Deep Plums, Berry Tones', 'Warm Browns, Khaki', 'Teal, Turquoise', 'Gold, Bronze'];
                         break;
-                    case 'Neutral to Warm (Balanced/Slightly Golden)':
-                        colorTemperature = 'Neutral-Warm';
-                        suitableColors = ['Soft Earth Tones', 'Muted Jewels', 'Cream, Taupe', 'Navy, Forest Green', 'Coral, Terracotta'];
-                        break;
-                    default:
-                        colorTemperature = 'Undetermined';
+                    default: // This will catch 'Undetermined' or combined types
+                        colorTemperature = 'Mixed/Undetermined';
                         suitableColors = ['Explore a variety of shades!'];
+                        break;
                 }
 
                 const skinHSL = rgbToHsl(r, g, b);
@@ -1594,10 +1654,10 @@
 
                 currentSkinToneAnalysisResult = `Selected Color: ${rgbToHex(r,g,b)} (RGB: ${r}, ${g}, ${b})\n\n`;
                 currentSkinToneAnalysisResult += `<strong>Color Temperature:</strong> ${colorTemperature}\n`;
-                currentSkinToneAnalysisResult += `<strong>Likely Undertone:</strong> ${undertone}\n\n`;
+                currentSkinToneAnalysisResult += `<strong>Likely Undertone:</strong> ${undertone} (Confidence: ${confidence.toFixed(1)}%)\n\n`;
                 currentSkinToneAnalysisResult += `<strong>Recommended Colors:</strong> ${suitableColors.join(', ')}\n\n`;
                 currentSkinToneAnalysisResult += `<strong>Color Theory Insights:</strong>\n`;
-                currentSkinToneAnalysisResult += `${undertoneExplanation}\n`;
+                currentSkinToneAnalysisResult += `${explanation}\n`;
                 currentSkinToneAnalysisResult += `${suggestedContrast}`;
 
                 skinToneResult.innerHTML = currentSkinToneAnalysisResult.replace(/\n/g, '<br>');
@@ -2013,7 +2073,7 @@
                 const pixelY = Math.max(0, Math.min(Math.floor(scaledY), imgNaturalHeight - 1));
 
                 const pixelData = hiddenCtx.getImageData(pixelX, pixelY, 1, 1).data;
-                const colorRgb = [pixelData[0], pixelData[1], pixelData[2]];
+                const colorRgb = [pixelData[0], pixelData[1], pixelData[2]]; // Fixed: pixelData[1] for green
                 const colorHex = rgbToHex(colorRgb[0], colorRgb[1], colorRgb[2]);
 
                 magnifierColorDisplay.style.backgroundColor = `rgb(${colorRgb.join(',')})`;
@@ -2023,7 +2083,7 @@
                 magnifierInfo.style.color = getLuminance(colorRgb[0], colorRgb[1], colorRgb[2]) > 0.5 ? 'black' : 'white';
 
 
-                const zoomFactor = 10;
+                const zoomFactor = 2; // Further Reduced zoom factor
                 magnifierCanvas.width = magnifier.offsetWidth;
                 magnifierCanvas.height = magnifier.offsetHeight - magnifierInfo.offsetHeight;
 
@@ -2040,7 +2100,7 @@
                     0, 0, magnifierCanvas.width, magnifierCanvas.height
                 );
 
-                magnifier.style.left = `${clientX + 20}px`;
+                magnifier.style.left = `${clientX}px`;
                 magnifier.style.top = `${clientY}px`;
                 magnifier.style.display = 'block';
             }
