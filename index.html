@@ -922,7 +922,8 @@
                 <div id="drag-handle" class="drag-handle">|</div>
                 <h3>Color Palette </h3>
             </div>
-             <div class="settings-content-scrollable">
+			  <div class="settings-content-scrollable">
+           
                 <div class="setting-group">
                     <h4>Extracted Color Palette</h4>
                     <button id="pick-color-button">Pick Color</button>
@@ -1210,6 +1211,14 @@
                 'delete-button-hover-bg': '#cc0000',
                 'suggested-palette-outline': '#666666'
             };
+            
+            // New reference colors for undertone analysis
+            const undertoneReferenceColors = {
+                'Warm': ['#F6D4B9', '#DEBA96', '#DAB08C', '#CD865A', '#B37858', '#96624D', '#552E1F'],
+                'Neutral': ['#F3D7C2', '#DCBA9E', '#CA9978', '#BC8F68', '#BB815C', '#A16F4C', '#60311F'],
+                'Cool': ['#F0CBB0', '#E4C9B6', '#DFBDA2', '#D6A98A', '#B77E53', '#653728', '#533624']
+            };
+            let referenceLabColors = {}; // Will be populated later
 
             settingsButton.addEventListener('click', () => togglePanel(settingsPanel));
             paletteSettingsButton.addEventListener('click', () => togglePanel(paletteAnalysisPanel, true));
@@ -1292,7 +1301,16 @@
             imageDisplay.addEventListener('mouseleave', hideMagnifier);
             imageDisplay.addEventListener('touchcancel', hideMagnifier);
 
-
+            function preProcessReferenceColors() {
+                for (const tone in undertoneReferenceColors) {
+                    referenceLabColors[tone] = undertoneReferenceColors[tone].map(hex => {
+                        const rgb = hexToRgb(hex.trim());
+                        return rgbToLab(rgb[0], rgb[1], rgb[2]);
+                    });
+                }
+            }
+            
+            preProcessReferenceColors();
             loadSettings();
             applyGeneralSettings();
             checkLayout();
@@ -1729,6 +1747,15 @@
 
                 return { L: L, a: a, b: bLab };
             }
+            
+            // New helper function to get distance in Lab space
+            function labColorDistance(lab1, lab2) {
+                return Math.sqrt(
+                    Math.pow(lab1.L - lab2.L, 2) +
+                    Math.pow(lab1.a - lab2.a, 2) +
+                    Math.pow(lab1.b - lab2.b, 2)
+                );
+            }
 
             function getSkinToneUndertone(rgbs) {
                 if (rgbs.length === 0) {
@@ -1747,9 +1774,7 @@
 
                 const undertoneProfiles = {
                     'Warm': {
-                        hueRanges: [
-                            { min: 25, max: 55 }
-                        ],
+                        hueRanges: [ { min: 25, max: 55 } ],
                         saturationRange: { min: 20, max: 70 },
                         lightnessRange: { min: 15, max: 90 },
                         labARange: { min: 8, max: 30 },
@@ -1767,11 +1792,7 @@
                         ]
                     },
                     'Cool': {
-                        hueRanges: [
-                            { min: 330, max: 360 },
-                            { min: 0, max: 20 },
-                            { min: 200, max: 280 }
-                        ],
+                        hueRanges: [ { min: 330, max: 360 }, { min: 0, max: 20 }, { min: 200, max: 280 } ],
                         saturationRange: { min: 15, max: 60 },
                         lightnessRange: { min: 15, max: 90 },
                         labARange: { min: -10, max: 10 },
@@ -1789,9 +1810,7 @@
                         ]
                     },
                     'Neutral': {
-                        hueRanges: [
-                            { min: 15, max: 35 }
-                        ],
+                        hueRanges: [ { min: 15, max: 35 } ],
                         saturationRange: { min: 10, max: 45 },
                         lightnessRange: { min: 15, max: 90 },
                         labARange: { min: -5, max: 15 },
@@ -1809,9 +1828,7 @@
                         ]
                     },
                     'Olive': {
-                        hueRanges: [
-                            { min: 60, max: 120 }
-                        ],
+                        hueRanges: [ { min: 60, max: 120 } ],
                         saturationRange: { min: 10, max: 50 },
                         lightnessRange: { min: 20, max: 75 },
                         labARange: { min: -15, max: 5 },
@@ -1838,60 +1855,54 @@
 
                 let scores = {};
                 let oliveTendency = false;
+                
+                // === NEW LOGIC: Calculate scores based on distance to reference colors ===
+                let referenceDistances = {};
+                let totalMinDistance = 0;
+                for (const tone in referenceLabColors) {
+                    let minDistance = Infinity;
+                    if(referenceLabColors[tone]) {
+                        for (const refLab of referenceLabColors[tone]) {
+                            const dist = labColorDistance(lab, refLab);
+                            if (dist < minDistance) {
+                                minDistance = dist;
+                            }
+                        }
+                    }
+                    referenceDistances[tone] = minDistance;
+                    totalMinDistance += minDistance;
+                }
+                const referenceWeight = 0.5; // How much this new method influences the total score
+                // =========================================================================
 
                 for (const type in undertoneProfiles) {
                     const profile = undertoneProfiles[type];
                     let score = 0;
 
-                    // Score based on HSL
+                    // --- Original Scoring (based on ranges) ---
                     let hueScore = 0;
                     for (const range of profile.hueRanges) {
                         if (range.min <= range.max) {
-                            if (h >= range.min && h <= range.max) {
-                                hueScore = 1;
-                                break;
-                            }
+                            if (h >= range.min && h <= range.max) { hueScore = 1; break; }
                         } else {
-                            if (h >= range.min || h <= range.max) {
-                                hueScore = 1;
-                                break;
-                            }
+                            if (h >= range.min || h <= range.max) { hueScore = 1; break; }
                         }
                     }
                     score += hueScore * profile.hueWeight;
 
-                    if (s >= profile.saturationRange.min && s <= profile.saturationRange.max) {
-                        score += 1 * profile.saturationWeight;
-                    } else if (s < profile.saturationRange.min) {
-                        score += (s / profile.saturationRange.min) * profile.saturationWeight * 0.5;
-                    } else if (s > profile.saturationRange.max) {
-                        score += (1 - ((s - profile.saturationRange.max) / (100 - profile.saturationRange.max))) * profile.saturationWeight * 0.5;
-                    }
-
-                    if (l >= profile.lightnessRange.min && l <= profile.lightnessRange.max) {
-                        score += 1 * profile.lightnessWeight;
-                    }
-
-                    // Score based on Lab color space (more perceptually uniform)
-                    if (lab.a >= profile.labARange.min && lab.a <= profile.labARange.max) {
-                        score += 1 * profile.labAWeight;
-                    } else if (lab.a < profile.labARange.min) {
-                        score += (1 - ((profile.labARange.min - lab.a) / (profile.labARange.min + 128))) * profile.labAWeight * 0.5;
-                    } else if (lab.a > profile.labARange.max) {
-                        score += (1 - ((lab.a - profile.labARange.max) / (127 - profile.labARange.max))) * profile.labAWeight * 0.5;
-                    }
-
-                    if (lab.b >= profile.labBRange.min && lab.b <= profile.labBRange.max) {
-                        score += 1 * profile.labBWeight;
-                    } else if (lab.b < profile.labBRange.min) {
-                        score += (1 - ((profile.labBRange.min - lab.b) / (profile.labBRange.min + 128))) * profile.labBWeight * 0.5;
-                    } else if (lab.b > profile.labBRange.max) {
-                        score += (1 - ((lab.b - profile.labBRange.max) / (127 - profile.labBRange.max))) * profile.labBWeight * 0.5;
-                    }
-
-                    // Additional olive check
-                    if (type === 'Olive' && profile.isOliveCheck(r, g, b, h, s)) {
-                        score += 0.3;
+                    if (s >= profile.saturationRange.min && s <= profile.saturationRange.max) score += 1 * profile.saturationWeight;
+                    if (l >= profile.lightnessRange.min && l <= profile.lightnessRange.max) score += 1 * profile.lightnessWeight;
+                    if (lab.a >= profile.labARange.min && lab.a <= profile.labARange.max) score += 1 * profile.labAWeight;
+                    if (lab.b >= profile.labBRange.min && lab.b <= profile.labBRange.max) score += 1 * profile.labBWeight;
+                    if (type === 'Olive' && profile.isOliveCheck(r, g, b, h, s)) score += 0.3;
+                    
+                    // --- NEW: Add reference color score ---
+                    if (referenceDistances[type] !== undefined && totalMinDistance > 0) {
+                        // Invert and normalize the distance to create a score (lower distance = higher score)
+                        const refScoreContribution = (1 - (referenceDistances[type] / totalMinDistance)) * referenceWeight;
+                        if (!isNaN(refScoreContribution)) {
+                            score += refScoreContribution;
+                        }
                     }
                     
                     scores[type] = score;
@@ -1911,7 +1922,6 @@
                     }
                 }
 
-                // Check for olive tendency even if not the top undertone
                 if (!topUndertones.includes('Olive') && undertoneProfiles['Olive'].isOliveCheck(r, g, b, h, s)) {
                     oliveTendency = true;
                 }
@@ -1923,7 +1933,7 @@
 
                 if (topUndertones.length > 0) {
                     if (topUndertones.includes('Olive')) {
-                        if (topUndertones.includes('Cool')) {
+                         if (topUndertones.includes('Cool')) {
                             finalUndertoneType = 'Cool Olive';
                             finalExplanation = "Your skin has a cool olive undertone, combining a greenish cast with pink/bluish hues. Deep jewel tones, cool muted greens, plums, and teals will flatter you.";
                             suggestedPalettes = undertoneProfiles['Olive'].palettes.concat(undertoneProfiles['Cool'].palettes);
@@ -1980,7 +1990,7 @@
                     }
 
                     bestMatch.undertone = finalUndertoneType;
-                    bestMatch.confidence = (sortedScores[0][1] / 1.5) * 100; // Normalize to 100% scale
+                    bestMatch.confidence = (sortedScores[0][1] / 2.0) * 100; // Normalize to 100% scale (adjusted max possible score)
                     if (isNaN(bestMatch.confidence)) bestMatch.confidence = 0;
                     bestMatch.explanation = finalExplanation;
                     bestMatch.palettes = suggestedPalettes;
@@ -2099,10 +2109,8 @@
                 const hairValue = { black: 10, dark_brown: 8, light_brown: 5, red: 6, blonde: 3, grey: 4 }[hair];
                 const eyeValue = { black: 10, dark_brown: 8, light_brown: 5, blue: 4, green: 5, grey: 6 }[eye];
                 
-                // Calculate overall contrast (difference between hair and skin lightness)
                 const overallContrast = Math.abs(hairValue - (skinL / 10));
                 
-                // Determine chroma (clear vs muted)
                 const isClear = skinS > 40 || 
                                (hair === 'black' || hair === 'red' || hair === 'blonde') || 
                                (eye === 'blue' || eye === 'green');
@@ -2127,7 +2135,6 @@
                         subSeason = isClear ? 'Soft Autumn' : (skinL > 50 ? 'Warm Autumn' : 'Deep Autumn');
                     }
                 } else {
-                    // Neutral undertone - decide based on contrast and chroma
                     if (overallContrast >= 5) {
                         primarySeason = isClear ? 'Bright Spring' : 'Deep Winter';
                     } else if (overallContrast >= 4) {
@@ -2791,6 +2798,16 @@
             
             function rgbToHex(r, g, b) {
                 return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+            }
+            
+            // New helper function to convert Hex to RGB
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? [
+                    parseInt(result[1], 16),
+                    parseInt(result[2], 16),
+                    parseInt(result[3], 16)
+                ] : null;
             }
 
             function rgbToHsl(r, g, b) {
