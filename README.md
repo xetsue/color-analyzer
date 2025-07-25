@@ -11,10 +11,10 @@ Image Color Palette and Analyzer Tool
 Calculates the perceptual distance (using the CIELAB color space) between the selected skin color and the new reference hex codes provided. The closest match in each category (Warm, Cool, Neutral) contributes to the final undertone score, fine-tuning the analysis.
 
 ## Previews
-<img width="1894" height="920" alt="image" src="https://github.com/user-attachments/assets/eafbd87d-61a5-4796-ae11-add0ad766eb0" />
-<img width="1900" height="928" alt="image" src="https://github.com/user-attachments/assets/8f51fac6-23d1-4f51-90ba-018088ff47ef" />
-<img width="1894" height="921" alt="image" src="https://github.com/user-attachments/assets/98a2a5ca-797c-49ea-8177-46186baaeff6" />
-<img width="1899" height="926" alt="image" src="https://github.com/user-attachments/assets/6d9d781b-daa1-4d6f-9441-0b6c65bc373e" />
+<img width="1896" height="921" alt="image" src="https://github.com/user-attachments/assets/53b449d6-bdcb-4b3b-9b09-421d0c2262e1" />
+<img width="1894" height="922" alt="image" src="https://github.com/user-attachments/assets/3f434791-2d22-4e0d-958e-08e27c8b8a13" />
+<img width="1894" height="921" alt="image" src="https://github.com/user-attachments/assets/090bd414-272e-4f5d-b3a6-b02dff4c43d9" />
+<img width="1888" height="913" alt="image" src="https://github.com/user-attachments/assets/4f6525b8-b871-4a43-8f7f-8c4b3084d714" />
 
 
 
