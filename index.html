@@ -2046,7 +2046,7 @@
                 }
                 
                 currentSkinToneAnalysisResult = `Selected Color: [ ${rgbToHex(r,g,b)} ]\n\n`;
-                currentSkinToneAnalysisResult += `Likely Undertone:${skinToneInfo.undertone} (Fidelity: ${skinToneInfo.confidence.toFixed(1)}%)\n\n`;
+                currentSkinToneAnalysisResult += `Likely Undertone (In any case of 3 results, the first two is the more dominant ones.):${skinToneInfo.undertone} (Fidelity: ${skinToneInfo.confidence.toFixed(1)}%)\n\n`;
                 currentSkinToneAnalysisResult += `Color Theory Insights:\n`;
                 currentSkinToneAnalysisResult += `${skinToneInfo.explanation}\n`;
                 currentSkinToneAnalysisResult += `${suggestedContrast}`;
