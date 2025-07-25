@@ -920,12 +920,10 @@
         <div id="palette-analysis-panel" style="display: none;">
             <div class="settings-header">
                 <div id="drag-handle" class="drag-handle">|</div>
-                <h3>Info </h3>
+                <h3>Info</h3>
             </div>
 			  <div class="settings-content-scrollable">
-
-
-           <p>More Analysis Options Below</p>
+           
                 <div class="setting-group">
                     <h4>Extracted Color Palette</h4>
                     <button id="pick-color-button">Pick Color</button>
@@ -945,7 +943,7 @@
 
                 <div class="setting-group" id="skin-tone-analysis-section">
                     <h4>Skin Tone Analysis [beta]</h4>
-                    <p>Disclaimer: This tool is a work in progress. -- Pick a color from the image that best represents your skin tone to get color recommendations. For best results, choose an area on your jawline or inner arm in natural lighting.</p>
+                    <p>This tool is not for professional purposes. -- Pick a color from the image that best represents your skin tone to get color recommendations. For best results, choose an area on your jawline or inner arm in natural lighting.</p>
                     <button id="pick-skin-tone-button">Pick Skin Tone</button>
                     <p id="skin-tone-result"></p>
 
@@ -1216,11 +1214,12 @@
             
             // New reference colors for undertone analysis
             const undertoneReferenceColors = {
-                'Warm': ['#F6D4B9', '#DEBA96', '#DAB08C', '#CD865A', '#B37858', '#96624D', '#552E1F', '#D39F66','#BD8E5A'],
-                'Neutral': ['#D6AA8D','#F3D7C2', '#DCBA9E', '#CA9978', '#BC8F68', '#BB815C', '#A16F4C', '#60311F', '#A05C35', '#CF8361', '#EFA069', '#B45230', '#FACBA1', '#CD8B51', '#C38151'],
-                'Cool': ['#F0CBB0', '#E4C9B6', '#DFBDA2', '#D6A98A', '#B77E53', '#653728', '#533624', '#DFAB9D', '#AE6B52', '#E0A18F', '#D38467', '#C15B4D', '#D37329', '#C3582C', '#BF784E', '#D5A88B', '#EAD5C2', '#DFA57D', '#E29060'],
-		'Olive': ['#8A7559', '#B6996F', '#9C7E5A', '#C7AA7C', '#C8AD83', '#D8C3A8', '#F4C197', '#DDC898', '#B7874D', '#D6A667', '#D09A58', '#D9B591', '#BD8E5A', '#B29784', '#856C4D', '#B79780', '#B1907D', '#BA9C82', '#988066', '#AA8F72', '#A58AA7', '#A6836D', '#786951', '#7E6850', '#998561', '#C3A381', '#B9956C', '#877163', '#C0A57E', '#9B6D00', '#9F8D01', '#7F6400', '#C3B87C', '#C4A569', '#7C5300', '#E8DDBF', '#FDF2C1', '#B0A569', '#FFE8C0', '#B29F68', '#C4A569', '#CFB899', '#95775D', '#BB9878','#AE8B6D', '#B18E6E', '#C4A569', '#FFE8C0', '#C3B87C', '#B0A569', '#B29F68']    
+                'Warm': ['#F6D4B9','#CD865A', '#B37858', '#96624D', '#552E1F', '#D39F66','#BD8E5A'],
+                'Neutral': ['#60311F','#A16F4C','#BB815C','#BC8F68','#CA9978','#D6AA8D','#DCBA9E','#F3D7C2'],
+                'Cool': ['#F0CBB0', '#E4C9B6', '#DFBDA2', '#D6A98A','#D6AA8D','#D5AA8B','#D6A98B', '#B77E53', '#653728', '#533624', '#DFAB9D', '#AE6B52', '#E0A18F', '#D38467', '#C15B4D', '#D37329', '#C3582C', '#BF784E', '#D5A88B', '#EAD5C2', '#DFA57D', '#E29060'],
+				'Olive': ['#8A7559', '#B6996F', '#9C7E5A', '#C7AA7C', '#C8AD83', '#D8C3A8', '#F4C197', '#DDC898', '#B7874D', '#D6A667', '#D09A58', '#D9B591', '#BD8E5A', '#A6907B']
             };
+            
             let referenceLabColors = {}; // Will be populated later
 
             settingsButton.addEventListener('click', () => togglePanel(settingsPanel));
@@ -1780,13 +1779,13 @@
                         hueRanges: [ { min: 25, max: 55 } ],
                         saturationRange: { min: 20, max: 70 },
                         lightnessRange: { min: 15, max: 90 },
-                        labARange: { min: 10, max: 30 },
-                        labBRange: { min: 20, max: 60 },
-                        hueWeight: 0.3,
-                        saturationWeight: 0.15,
-                        lightnessWeight: 0.05,
+                        labARange: { min: 8, max: 30 },
+                        labBRange: { min: 15, max: 60 },
+                        hueWeight: 0.4,
+                        saturationWeight: 0.2,
+                        lightnessWeight: 0.1,
                         labAWeight: 0.2,
-                        labBWeight: 0.25,
+                        labBWeight: 0.3,
                         description: "Your skin has golden, peachy, or yellow hues. You'll glow in rich, earthy tones like olive green, mustard, terracotta, warm reds, and deep browns.",
                         palettes: [
                             ['#8B4513', '#D2B48C', '#F4A460', '#BDB76B', '#A0522D'],
@@ -1798,13 +1797,13 @@
                         hueRanges: [ { min: 330, max: 360 }, { min: 0, max: 20 }, { min: 200, max: 280 } ],
                         saturationRange: { min: 15, max: 60 },
                         lightnessRange: { min: 15, max: 90 },
-                        labARange: { min: -20, max: 10 },
-                        labBRange: { min: -30, max: 20 },
-                        hueWeight: 0.4,
-                        saturationWeight: 0.2,
-                        lightnessWeight: 0.1,
-                        labAWeight: 0.4,
-                        labBWeight: 0.5,
+                        labARange: { min: -10, max: 10 },
+                        labBRange: { min: -20, max: 20 },
+                        hueWeight: 0.3,
+                        saturationWeight: 0.3,
+                        lightnessWeight: 0.15,
+                        labAWeight: 0.3,
+                        labBWeight: 0.4,
                         description: "Your skin has rosy, pinkish, or bluish hues. Jewel tones and cool shades like navy, emerald greens, cool reds (berry, wine), purples, and true blues will enhance your natural radiance.",
                         palettes: [
                             ['#4682B4', '#6A5ACD', '#483D8B', '#000080', '#191970'],
@@ -1818,11 +1817,11 @@
                         lightnessRange: { min: 15, max: 90 },
                         labARange: { min: -5, max: 15 },
                         labBRange: { min: -5, max: 25 },
-                        hueWeight: 0.3,
-                        saturationWeight: 0.2,
-                        lightnessWeight: 0.2,
-                        labAWeight: 0.15,
-                        labBWeight: 0.25,
+                        hueWeight: 0.2,
+                        saturationWeight: 0.1,
+                        lightnessWeight: 0.1,
+                        labAWeight: 0.4,
+                        labBWeight: 0.3,
                         description: "Your skin has a balanced mix of warm and cool tones, allowing you to wear a wide range of colors beautifully. Soft neutrals like greys, taupes, muted pastels, and medium shades often work best.",
                         palettes: [
                             ['#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3', '#F5F5F5'],
