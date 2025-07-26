@@ -2084,14 +2084,14 @@
                 }
                 
                 currentSkinToneAnalysisResult = `Selected Color: [ ${rgbToHex(r,g,b)} ]\n\n`;
-                currentSkinToneAnalysisResult += `Likely Undertone (In any case of 3 results, the first two is the more dominant ones.):${skinToneInfo.undertone} (Fidelity: ${skinToneInfo.confidence.toFixed(1)}%)\n\n`;
+                currentSkinToneAnalysisResult += `Detected Undertones:${skinToneInfo.undertone} (Fidelity: ${skinToneInfo.confidence.toFixed(1)}%)\n\n`;
                 currentSkinToneAnalysisResult += `Color Theory Insights:\n`;
                 currentSkinToneAnalysisResult += `${skinToneInfo.explanation}\n`;
                 currentSkinToneAnalysisResult += `${suggestedContrast}`;
                 
                 let displayHTML = `<strong>Selected Color: ${rgbToHex(r, g, b)} (RGB: ${r}, ${g}, ${b})</strong>` +
                     sampledColorsHTML +
-                    `<strong>Likely Undertone:</strong>${skinToneInfo.undertone} [Fidelity: ${skinToneInfo.confidence.toFixed(1)}%]<br><br>` +
+                    `<strong>Detected Undertones:</strong>${skinToneInfo.undertone} [Fidelity: ${skinToneInfo.confidence.toFixed(1)}%]<br><br>` +
                     `<strong>Color Theory Insights:</strong>${skinToneInfo.explanation}<br>${suggestedContrast}`;
 
                 const pieChartContainer = document.createElement('div');
