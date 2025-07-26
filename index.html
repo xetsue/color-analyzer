@@ -2090,7 +2090,7 @@
                 
                 const part1HTML = `<strong>Selected Color: ${rgbToHex(r, g, b)} (RGB: ${r}, ${g}, ${b})</strong>` +
                                 sampledColorsHTML +
-                                `<strong>Likely Undertone:</strong> ${skinToneInfo.undertone} [Fidelity: ${skinToneInfo.confidence.toFixed(1)}%]`;
+                                `<strong>Detected Undertones:</strong> ${skinToneInfo.undertone} [Fidelity: ${skinToneInfo.confidence.toFixed(1)}%]`;
 
                 const part2HTML = `<br><br><strong>Color Theory Insights:</strong><br>${skinToneInfo.explanation}<br><br>${suggestedContrast}`;
 
