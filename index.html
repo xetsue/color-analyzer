@@ -1032,8 +1032,8 @@
 		    
                 <div id="eyedropeyedropper-crosshairper-crosshair"></div>
 		    
-                <p id="messages" style="font-size: 10px; font-color: #333333;">Files are processed on your device only</p>
-                <p id="messages" style="font-size: 10px; font-color: #333333;">No private data are collected</p>
+                <p id="message1" style="font-size: 10px; font-color: #333333;">Files are processed on your device</p>
+                <p id="message2" style="font-size: 10px; font-color: #333333;">No private data collected</p>
             </div>
             <div class="controls">
                 <button id="upload-button">Upload Image</button>
@@ -1245,10 +1245,15 @@
     </footer>
 
     <script>
+	    
 	  setTimeout(function() {
-	    document.getElementById('messages').style.display = 'none';
-	  }, 3000); // milliseconds = 3 seconds
-	  
+	    document.getElementById('message1').style.display = 'none';
+	  }, 3000); // milliseconds = 3 seconds 
+	    
+	  setTimeout(function() {
+	    document.getElementById('message2').style.display = 'none';
+	  }, 3000);
+	    
         document.addEventListener('DOMContentLoaded', () => {
             const mainContainer = document.querySelector('.main-container');
             const frame = document.querySelector('.frame');
