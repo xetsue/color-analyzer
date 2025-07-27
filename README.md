@@ -4,7 +4,7 @@ Image Color Palette and Analyzer Tool
 
 ## Existing Features
 - Color palette extractor
-- Color picker
+- Color picker - From Image / Custom / Enter Code
 - Export results as .txt / direct copy by pressing hex
   
 - [WIP] Skin Tone Analysis -- Undetone and Seasons Analysis
