@@ -1024,13 +1024,16 @@
                 <div class="fullscreen-bottom-left-controls" style="display: none;">
                     <button id="hide-ui-button">Hide</button>
                 </div>
+		    
                 <div id="image-display">
                     <img id="uploaded-image" src="" alt="Uploaded Image" style="display:none;">
                     <p id="placeholder-text">By Tsu.</p>
-			<p id="message" style="font-size: 10px; font-color: #333333;">Files are processed on your device only</p>
-                        <p id="message" style="font-size: 10px; font-color: #333333;">No private data are collected</p>
                 </div>
-                <div id="eyedropper-crosshair"></div>
+		    
+                <div id="eyedropeyedropper-crosshairper-crosshair"></div>
+		    
+                <p id="messages" style="font-size: 10px; font-color: #333333;">Files are processed on your device only</p>
+                <p id="messages" style="font-size: 10px; font-color: #333333;">No private data are collected</p>
             </div>
             <div class="controls">
                 <button id="upload-button">Upload Image</button>
@@ -1243,7 +1246,7 @@
 
     <script>
 	  setTimeout(function() {
-	    document.getElementById('disappearingText').style.display = 'none';
+	    document.getElementById('messages').style.display = 'none';
 	  }, 3000); // milliseconds = 3 seconds
 	  
         document.addEventListener('DOMContentLoaded', () => {
