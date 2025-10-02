@@ -2,16 +2,27 @@
 ## [ color-analyzer ]
 Image Color Palette and Analyzer Tool 
 
-## Existing Features
+## Current Features
 - Color palette extractor
 - Color picker - From Image / Custom / Enter Code
 - Export results as .txt / direct copy by pressing hex
-- Color Undertone now serves as Art purposes with palettes suggestions included.
+- Color Undertone — serves as Art purposes with palettes suggestions included
 
-`Skin Tone Analysis Removed due to redundancy and code optimisation.`
+  
+### Changelog 
+Oct 2 2025 Patch 5.0 archived
+
+[Archive-5](https://github.com/xetsue/color-analyzer/blob/main/archive/index/5-archive.html)
+
+Notes: `Skin Tone Analysis Removed due to redundancy and code optimisation.`
 > ~[WIP] Skin Tone Analysis -- Undetone and Seasons Analysis
 Calculates the perceptual distance (using the CIELAB color space) between the selected skin color and the new reference hex codes provided. The closest match in each category (Warm, Cool, Neutral) contributes to the final undertone score, fine-tuning the analysis.~
 
+July Patch 0.0 to 4.0 Archived
+
+[Archive-Main](https://github.com/xetsue/color-analyzer/blob/main/archive/index/)
+
+Notes: `Finalised for July 2025 Patches into 5.0v`
 
 
 ## Previews
