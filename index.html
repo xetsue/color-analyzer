@@ -28,18 +28,15 @@
             --number-input-outline-radius: 6px;
             --frame-custom-size: 400px;
             --frame-custom-min-size: 300px;
-
             --table-header-bg: #f5f5f5;
             --table-row-bg-odd: #ffffff;
             --table-row-bg-even: #f9f9f9;
             --table-border-color: #e0e0e0;
             --color-outline-color: #0000ff;
             --copy-btn-hover-bg: rgba(0,0,0,0.05);
-            --skin-tone-result-text-color: #000000;
             --delete-button-bg: #ff4d4d;
             --delete-button-text: white;
             --delete-button-hover-bg: #cc0000;
-            --suggested-palette-outline: #888888;
         }
 
         body.dark-theme {
@@ -59,12 +56,10 @@
             --table-border-color: #444444;
             --color-outline-color: #9999ff;
             --copy-btn-hover-bg: rgba(255,255,255,0.1);
-            --skin-tone-result-text-color: #e0e0e0;
             --number-input-bg: #3a3a3a;
             --number-input-outline-color: #555555;
             --delete-button-bg: #993333;
             --delete-button-hover-bg: #cc0000;
-            --suggested-palette-outline: #666666;
         }
 
         body {
@@ -613,6 +608,7 @@
             vertical-align: middle;
             border-radius: 2px;
             box-sizing: border-box;
+            cursor: pointer;
         }
 
         .color-code-cell .color-value {
@@ -639,7 +635,6 @@
         .delete-btn:hover {
             background-color: var(--delete-button-hover-bg);
         }
-
 
         .color-location-indicator {
             position: absolute;
@@ -668,48 +663,95 @@
             display: none;
         }
         
-        #skin-tone-analysis-section {
-            margin-top: 5px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--settings-outline);
-        }
-        #skin-tone-analysis-section h4 {
-            margin-bottom: 5px;
-        }
-        #skin-tone-analysis-section p {
-            font-size: 13px;
-            line-height: 1.4;
-            margin-bottom: 10px;
-            font-family: var(--font-family);
-        }
-        #pick-skin-tone-button {
-            width: auto;
-            padding: 6px 12px;
-            margin-bottom: 10px;
-        }
-        #skin-tone-result {
+        #undertone-result {
             margin-top: 15px;
             border: 1px solid var(--settings-outline);
             border-radius: 5px;
             padding: 10px;
             background-color: var(--table-row-bg-even);
             font-weight: normal;
-            color: var(--skin-tone-result-text-color);
-            white-space: pre-wrap;
+            color: var(--text-color);
             font-size: 13px;
             line-height: 1.6;
             font-family: var(--font-family);
         }
-        #skin-tone-result strong, #season-analysis-result strong {
+        #undertone-result strong {
             display: block;
-            margin-top: 8px;
             margin-bottom: 3px;
             font-size: 14px;
             color: var(--frame-color);
         }
-        #skin-tone-result strong:first-child, #season-analysis-result strong:first-child {
-            margin-top: 0;
+
+        .undertone-swatch-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
         }
+
+        .analysis-swatch {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--frame-color);
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        
+        .suggestion-swatches {
+            display: flex;
+            gap: 5px;
+        }
+
+        .suggestion-swatch {
+            width: 25px;
+            height: 25px;
+            border: 1px solid var(--settings-outline);
+            border-radius: 3px;
+        }
+        
+        #grid-view-header {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--settings-outline);
+            text-align: right;
+        }
+        #grid-view-format-toggle {
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        #grid-view-format-toggle:hover {
+            background-color: var(--copy-btn-hover-bg);
+        }
+        #color-grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .grid-swatch {
+            width: calc(10% - 5px);
+            aspect-ratio: 1;
+            border: 1px solid var(--settings-outline);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+        .grid-swatch:hover::after {
+            content: attr(data-color-code);
+            position: absolute;
+            bottom: 105%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
 
         #magnifier {
             position: fixed;
@@ -795,95 +837,6 @@
             font-size: 14px;
         }
 
-        .suggested-palettes {
-            margin-top: 15px;
-            border-top: 1px dashed var(--settings-outline);
-            padding-top: 10px;
-        }
-
-        .suggested-palettes h5 {
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-
-        .color-palette-row {
-            display: flex;
-            margin-bottom: 8px;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-
-        .palette-color-swatch {
-            width: 30px;
-            height: 30px;
-            border: 1px solid var(--suggested-palette-outline);
-            cursor: pointer;
-            position: relative;
-            box-sizing: border-box;
-            border-radius: 3px;
-        }
-
-        .palette-color-swatch:hover::after {
-            content: attr(data-hex);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 2px 5px;
-            border-radius: 3px;
-            white-space: nowrap;
-            font-size: 10px;
-            margin-bottom: 5px;
-        }
-
-        .pie-chart-container {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            gap: 15px;
-        }
-
-        .pie-chart {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .pie-chart-legend {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .pie-chart-legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: default;
-        }
-
-        .pie-chart-legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        .pie-chart-legend-label {
-            font-size: 12px;
-        }
-
-        .pie-chart-legend-percent {
-            font-size: 11px;
-            opacity: 0.8;
-            margin-left: auto;
-        }
-
         @media (max-width: 767px), (max-width: 991px) and (orientation: portrait) {
             .main-container {
                 padding: 10px;
@@ -949,6 +902,9 @@
             .main-container.side-by-side-layout #palette-analysis-panel .drag-handle {
                 display: block !important;
             }
+            .grid-swatch {
+                width: calc(12.5% - 5px);
+            }
         }
 
         #custom-color-panel {
@@ -1010,28 +966,22 @@
     <div class="header">
         <button id="layout-button">Layout</button>
         <button id="settings-button">Settings</button>
-        
     </div>
 
     <div class="main-container side-by-side-layout">
         <div class="left-panel-wrapper">
             <div class="frame">
-            	
                 <div class="action-buttons">
                     <button id="fullscreen-button">⛶</button>
                 </div> 
-                
                 <div class="fullscreen-bottom-left-controls" style="display: none;">
                     <button id="hide-ui-button">Hide</button>
                 </div>
-		    
                 <div id="image-display">
                     <img id="uploaded-image" src="" alt="Uploaded Image" style="display:none;">
                     <p id="placeholder-text">By Tsu.</p>
                 </div>
-		    
                 <div id="eyedropper-crosshair"></div>
-		    
                 <p id="message1" style="font-size: 10px; font-color: #333333;">Files are processed on your device<br>[ No private datas are collected ]</p>
             </div>
             <div class="controls">
@@ -1046,94 +996,72 @@
         <div id="palette-analysis-panel">
             <div class="settings-header">
                 <div id="drag-handle" class="drag-handle">
-                	     <button id="theme-toggle-button">Light</button>
-                		 <button id="hide-frame-ui-button" style=" -webkit-tap-highlight-color: transparent;">UI</button>|</div>
+                    <button id="theme-toggle-button">Light</button>
+                    <button id="hide-frame-ui-button" style=" -webkit-tap-highlight-color: transparent;">UI</button>|
+                </div>
                 <h3>Info</h3>
             </div>
-			  <div class="settings-content-scrollable">
-           
+            <div class="settings-content-scrollable">
                 <div class="setting-group">
                     <h4>Color Palette</h4>
                     <button id="pick-color-button">Select</button>
                     <button id="custom-color-button">Custom</button>
                     <button id="code-input-button">Code</button>
-                    <table id="color-palette-table">
-                        <thead>
-                            <tr>
-                                <th style="width:50px;">Color</th>
-                                <th>Hex ▽</th>
-                                <th style="width: 40px;">DEL</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                   <br><br> <p style="font-size:12px; opacity:0.8; margin-top:10px;">Select - Pick color from image<br>
-                   	Click on a color code to copy<br>
-                   	Table Header Press -- (HEX, RGB, HSL, CMYK)</p><br>
-                </div>
+                    <button id="toggle-view-button">Show All</button>
 
-                <div class="setting-group" id="skin-tone-analysis-section">
-                    <h4>Skin Tone Analysis</h4>
-                    <p>Select a color best represents your skin tone. For better results, choose an area on your jawline or inner arm in natural lighting.<br><br></p>
-                    <button id="pick-skin-tone-button">Pick Skin Tone</button>
-                    <p id="skin-tone-result"></p>
-                    
-                    <br>
-
-                    <div id="season-analysis-sub-section" style="margin-top: 20px; border-top: 1px dashed var(--settings-outline); padding-top: 15px;">
-                        <h4>Seasons Insight</h4>
-                        <p style="font-size: 13px; line-height: 1.4; margin-bottom: 10px;">Select your natural hair and eye color to determine your color season.<br><br></p>
-                        <label for="hair-color-select">Natural Hair Color:</label>
-                        <select id="hair-color-select" style="width: 100%; margin-bottom: 10px;">
-                            <option value="black">Black</option>
-                            <option value="dark_brown" selected>Dark Brown</option>
-                            <option value="light_brown">Light Brown</option>
-                            <option value="blonde">Blonde</option>
-                            <option value="red">Red/Auburn</option>
-                            <option value="grey">Grey/White</option>
-                        </select>
-                        <label for="eye-color-select">Eye Color:</label>
-                        <select id="eye-color-select" style="width: 100%; margin-bottom: 10px;">
-                            <option value="dark_brown" selected>Dark Brown</option>
-                            <option value="light_brown">Light Brown/Hazel</option>
-                            <option value="blue">Blue</option>
-                            <option value="green">Green</option>
-                            <option value="grey">Grey</option>
-                            <option value="black">Black</option>
-                        </select>
-                        <div id="season-analysis-result" style="font-weight: normal; color: var(--skin-tone-result-text-color); font-size: 13px; line-height: 1.6; white-space: pre-wrap;"></div>
+                    <div id="table-view-wrapper">
+                        <table id="color-palette-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:50px;">Color</th>
+                                    <th id="table-format-toggle">Hex ▽</th>
+                                    <th style="width: 40px;">DEL</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <br><br>
+
+                    <div id="grid-view-wrapper" style="display: none;">
+                        <div id="grid-view-header">
+                            <span id="grid-view-format-toggle">HEX ▽</span>
+                        </div>
+                        <div id="color-grid-container"></div>
+                    </div>
+
+                    <br><p style="font-size:12px; opacity:0.8; margin-top:10px;">Click a color code to copy it.<br>Click a table header or format name to cycle.<br><b>Show All View may take a while to load.</b></p><br>
                 </div>
-  
-                	
+
+                <div class="setting-group" id="color-undertone-analysis-section">
+                    <h4>Color Undertone Analysis</h4>
+                    <p>Click a color swatch to analyze its undertone for art and color matching guidance.</p>
+                    <div id="undertone-result">Select a color to begin analysis.</div>
+                </div>
+
                 <div class="setting-group">
                     <h4>Palette Extraction Settings</h4><br><br>
+                    <div class="slider-input-group">
+                        <label for="num-colors">Default View Colors:</label>
+                        <input type="range" id="num-colors" min="1" max="200" step="1" value="10">
+                        <input type="number" id="num-colors-num" min="1" max="200" step="1" value="10" class="slider-value-input">
+                    </div>
+                    <p style="font-size:13px; opacity:0.8;">Number of colors for the default table view.<br><br></p><br>
                     
                     <div class="slider-input-group">
-                        <label for="num-colors">Number of Colors:</label>
-                        <input type="range" id="num-colors" min="2" max="20" step="1" value="8">
-                        <input type="number" id="num-colors-num" min="2" max="20" step="1" value="8" class="slider-value-input">
+                        <label for="show-all-colors">"Show All" View Colors:</label>
+                        <input type="range" id="show-all-colors" min="10" max="200" step="1" value="30">
+                        <input type="number" id="show-all-colors-num" min="10" max="200" step="1" value="30" class="slider-value-input">
                     </div>
-                    <p style="font-size:13px; opacity:0.8;"> Large images resolution and results may cause performance issues.<br><br></p><br>
-                    
-                    
+                    <p style="font-size:13px; opacity:0.8;">Number of colors for the "Show All" grid view.<br><br></p><br>
+
                     <div class="slider-input-group">
                         <label for="sample-size">Sample Density:</label>
                         <input type="range" id="sample-size" min="0.1" max="1" step="0.1" value="0.5">
                         <input type="number" id="sample-size-num" min="0.1" max="1" step="0.1" value="0.5" class="slider-value-input">
                     </div>
-                    <p style="font-size:13px; opacity:0.8;"> Increase color accuracy sampled from an image (affect performance).<br><br></p><br>
-                    
-                    <div class="slider-input-group">
-                        <label for="color-group-size">Skin Tone Sample Area:</label>
-                        <input type="range" id="color-group-size" min="1" max="25" step="1" value="3">
-                        <input type="number" id="color-group-size-num" min="1" max="25" step="1" value="3" class="slider-value-input">
-                    </div>
-                    <p style="font-size:13px; opacity:0.8;"> Increase area of color selected for skin and find average color.<br></p><br>
+                    <p style="font-size:13px; opacity:0.8;">Higher density increases accuracy but may affect performance.<br></p><br>
                     <br>
-                    	<p>Note that this is a tool for general guidance not substitute of professional analysis. </p>
+                    <p>Thank You For Using Coloranly</p>
                 </div>
             </div>
         </div>
@@ -1165,11 +1093,9 @@
             <label>Table Row Even BG: <input type="color" id="table-row-bg-even" value="#f9f9f9"></label>
             <label>Table Border: <input type="color" id="table-border-color" value="#e0e0e0"></label>
             <label>Copy Hover BG: <input type="color" id="copy-btn-hover-bg" value="rgba(0,0,0,0.05)"></label>
-            <label>Skin Tone Result Text: <input type="color" id="skin-tone-result-text-color" value="#000000"></label>
             <label>Delete Button BG: <input type="color" id="delete-button-bg" value="#ff4d4d"></label>
             <label>Delete Button Text: <input type="color" id="delete-button-text" value="#ffffff"></label>
             <label>Delete Button Hover BG: <input type="color" id="delete-button-hover-bg" value="#cc0000"></label>
-            <label>Suggested Palette Outline: <input type="color" id="suggested-palette-outline" value="#888888"></label>
         </div>
         <div class="setting-group">
             <h4>Input Styles</h4>
@@ -1206,10 +1132,9 @@
     <div id="custom-color-panel">
         <h4>Custom Color</h4>
         <div style="position: relative; display: inline-block;">
-    <input type="color" id="custom-color-picker" value="#000000" style="width: 300px; height: 30px;">
-    <span style="position: absolute; top: 43%; left: 10%; transform: translate(-50%, -50%); color: #d1d1d1; pointer-events: none;">Edit</span>
-</div>
-
+            <input type="color" id="custom-color-picker" value="#000000" style="width: 300px; height: 30px;">
+            <span style="position: absolute; top: 43%; left: 10%; transform: translate(-50%, -50%); color: #d1d1d1; pointer-events: none;">Edit</span>
+        </div>
         <div class="button-group">
             <button id="add-custom-color-button">Add Color</button>
             <button id="cancel-custom-color-button">Cancel</button>
@@ -1226,7 +1151,6 @@
     </div>
 
     <input type="file" id="image-input" accept="image/*" style="display: none;">
-
     <canvas id="hidden-canvas" style="display:none;"></canvas>
     
     <div id="magnifier" style="display: none;">
@@ -1244,175 +1168,94 @@
     </footer>
 
     <script>
-	    
-	  setTimeout(function() {
-	    document.getElementById('message1').style.display = 'none';
-	  }, 3000); // milliseconds = 3 seconds 
-	  
+        setTimeout(function() {
+            document.getElementById('message1').style.display = 'none';
+        }, 3000);
+      
         document.addEventListener('DOMContentLoaded', () => {
+            const getEl = (id) => document.getElementById(id);
             const mainContainer = document.querySelector('.main-container');
             const frame = document.querySelector('.frame');
-            const imageDisplay = document.getElementById('image-display');
-            const uploadedImage = document.getElementById('uploaded-image');
-            const placeholderText = document.getElementById('placeholder-text');
-            const settingsButton = document.getElementById('settings-button');
-            const paletteSettingsButton = document.getElementById('palette-settings-button');
-            const layoutButton = document.getElementById('layout-button');
-            const uploadButton = document.getElementById('upload-button');
-            const clearButton = document.getElementById('clear-button');
-            const analyzeButton = document.getElementById('analyze-button');
-            const exportButton = document.getElementById('export-button');
-            const swapPanelsButton = document.getElementById('swap-panels-button');
-            const applyGeneralSettingsBtn = document.getElementById('apply-general-settings-button');
-            const resetSettingsBtn = document.getElementById('reset-settings-button');
-            const fullscreenButton = document.getElementById('fullscreen-button');
-            const hideUiButton = document.getElementById('hide-ui-button');
-            const hideFrameUiButton = document.getElementById('hide-frame-ui-button');
-            const settingsPanel = document.getElementById('settings-panel');
-            const paletteAnalysisPanel = document.getElementById('palette-analysis-panel');
-            const dragHandle = document.getElementById('drag-handle');
+            const imageDisplay = getEl('image-display');
+            const uploadedImage = getEl('uploaded-image');
+            const placeholderText = getEl('placeholder-text');
+            const settingsButton = getEl('settings-button');
+            const paletteSettingsButton = getEl('palette-settings-button');
+            const layoutButton = getEl('layout-button');
+            const uploadButton = getEl('upload-button');
+            const clearButton = getEl('clear-button');
+            const analyzeButton = getEl('analyze-button');
+            const exportButton = getEl('export-button');
+            const swapPanelsButton = getEl('swap-panels-button');
+            const applyGeneralSettingsBtn = getEl('apply-general-settings-button');
+            const resetSettingsBtn = getEl('reset-settings-button');
+            const fullscreenButton = getEl('fullscreen-button');
+            const hideUiButton = getEl('hide-ui-button');
+            const hideFrameUiButton = getEl('hide-frame-ui-button');
+            const settingsPanel = getEl('settings-panel');
+            const paletteAnalysisPanel = getEl('palette-analysis-panel');
+            const dragHandle = getEl('drag-handle');
             const fullscreenBottomLeftControls = document.querySelector('.fullscreen-bottom-left-controls');
-            const imageInput = document.getElementById('image-input');
-            const hiddenCanvas = document.getElementById('hidden-canvas');
+            const imageInput = getEl('image-input');
+            const hiddenCanvas = getEl('hidden-canvas');
             const hiddenCtx = hiddenCanvas.getContext('2d', { willReadFrequently: true });
             const paletteTableBody = document.querySelector('#color-palette-table tbody');
-            const numColorsInput = document.getElementById('num-colors');
-            const numColorsNumInput = document.getElementById('num-colors-num');
-            const sampleSizeInput = document.getElementById('sample-size');
-            const sampleSizeNumInput = document.getElementById('sample-size-num');
-            const pickSkinToneButton = document.getElementById('pick-skin-tone-button');
-            const skinToneResult = document.getElementById('skin-tone-result');
+            const numColorsInput = getEl('num-colors');
+            const numColorsNumInput = getEl('num-colors-num');
+            const sampleSizeInput = getEl('sample-size');
+            const sampleSizeNumInput = getEl('sample-size-num');
             const controlsDiv = document.querySelector('.controls');
-            const colorGroupSizeInput = document.getElementById('color-group-size');
-            const colorGroupSizeNumInput = document.getElementById('color-group-size-num');
-            const pickColorButton = document.getElementById('pick-color-button');
-            const customColorButton = document.getElementById('custom-color-button');
-            const codeInputButton = document.getElementById('code-input-button');
-            const customColorPanel = document.getElementById('custom-color-panel');
-            const customColorPicker = document.getElementById('custom-color-picker');
-            const addCustomColorButton = document.getElementById('add-custom-color-button');
-            const cancelCustomColorButton = document.getElementById('cancel-custom-color-button');
-            const codeInputPanel = document.getElementById('code-input-panel');
-            const colorCodeInput = document.getElementById('color-code-input');
-            const addCodeColorButton = document.getElementById('add-code-color-button');
-            const cancelCodeInputButton = document.getElementById('cancel-code-input-button');
-
-            const hairColorSelect = document.getElementById('hair-color-select');
-            const eyeColorSelect = document.getElementById('eye-color-select');
-            const seasonAnalysisResult = document.getElementById('season-analysis-result');
-
-            const magnifier = document.getElementById('magnifier');
-            const magnifierCanvas = document.getElementById('magnifier-canvas');
+            const pickColorButton = getEl('pick-color-button');
+            const customColorButton = getEl('custom-color-button');
+            const codeInputButton = getEl('code-input-button');
+            const customColorPanel = getEl('custom-color-panel');
+            const customColorPicker = getEl('custom-color-picker');
+            const addCustomColorButton = getEl('add-custom-color-button');
+            const cancelCustomColorButton = getEl('cancel-custom-color-button');
+            const codeInputPanel = getEl('code-input-panel');
+            const colorCodeInput = getEl('color-code-input');
+            const addCodeColorButton = getEl('add-code-color-button');
+            const cancelCodeInputButton = getEl('cancel-code-input-button');
+            const undertoneResultDiv = getEl('undertone-result');
+            const toggleViewButton = getEl('toggle-view-button');
+            const tableViewWrapper = getEl('table-view-wrapper');
+            const gridViewWrapper = getEl('grid-view-wrapper');
+            const gridContainer = getEl('color-grid-container');
+            const tableFormatToggle = getEl('table-format-toggle');
+            const gridViewFormatToggle = getEl('grid-view-format-toggle');
+            const showAllColorsInput = getEl('show-all-colors');
+            const showAllColorsNumInput = getEl('show-all-colors-num');
+            const magnifier = getEl('magnifier');
+            const magnifierCanvas = getEl('magnifier-canvas');
             const magnifierCtx = magnifierCanvas.getContext('2d', { willReadFrequently: true });
-            const magnifierInfo = document.getElementById('magnifier-info');
+            const magnifierInfo = getEl('magnifier-info');
             const magnifierColorDisplay = magnifierInfo.querySelector('.color-display');
             const magnifierHexCode = magnifierInfo.querySelector('.hex-code');
             const magnifierRgbCode = magnifierInfo.querySelector('.rgb-code');
-            const copyNotification = document.getElementById('copy-notification');
-            const eyedropperCrosshair = document.getElementById('eyedropper-crosshair'); 
-
-            const generalSettingsInputs = document.querySelectorAll('#settings-panel input, #settings-panel select');
-            const paletteSettingsInputs = document.querySelectorAll('#palette-analysis-panel input[type="range"], #palette-analysis-panel input[type="number"]');
-
-            const themeToggleButton = document.getElementById('theme-toggle-button');
-
+            const copyNotification = getEl('copy-notification');
+            const eyedropperCrosshair = getEl('eyedropper-crosshair');
+            const themeToggleButton = getEl('theme-toggle-button');
+            
             let originalImage = null;
             let currentPalette = [];
             let isPalettePanelManuallyHidden = false;
             let isKeyboardOpen = false;
             let isManualLayoutEnabled = true;
             let dragState = { active: false, currentX: 0, currentY: 0, initialX: 0, initialY: 0, xOffset: 0, yOffset: 0 };
-            let currentSkinToneAnalysisResult = "";
-            let currentSeasonAnalysisResult = "";
-            let currentSkinToneInfo = null;
             let isPickingColor = false;
-            let isPickingSkinTone = false;
             let isDarkTheme = false;
             let currentColorFormat = 'hex';
+            let isGridView = false;
+            let hasShownPerformanceWarning = false;
 
-            const defaultSettings = {
-                'bg-color': '#f0f0f0',
-                'frame-color': '#333333',
-                'text-color': '#000000',
-                'button-bg': '#e0e0e0',
-                'button-text': '#000000',
-                'settings-bg': '#f0f0f0',
-                'settings-outline': '#cccccc',
-                'slider-track': '#dddddd',
-                'slider-thumb': '#666666',
-                'checkbox-color': '#666666',
-                'frame-radius': '5',
-                'button-radius': '30',
-                'settings-radius': '3',
-                'font-family': "'Monospace', monospace",
-                'font-size': '14',
-                'in-frame-ui-scale': '1',
-                'number-input-bg': '#ffffff',
-                'number-input-outline-color': '#cccccc',
-                'number-input-outline-radius': '5',
-                'frame-custom-size': '400',
-                'frame-custom-min-size': '300',
-                'table-header-bg': '#f5f5f5',
-                'table-row-bg-odd': '#ffffff',
-                'table-row-bg-even': '#f9f9f9',
-                'table-border-color': '#e0e0e0',
-                'color-outline-color': '#0000ff',
-                'copy-btn-hover-bg': 'rgba(0,0,0,0.05)',
-                'skin-tone-result-text-color': '#000000',
-                'delete-button-bg': '#ff4d4d',
-                'delete-button-text': '#ffffff',
-                'delete-button-hover-bg': '#cc0000',
-                'suggested-palette-outline': '#888888',
-                'hair-color-select': 'dark_brown',
-                'eye-color-select': 'dark_brown'
-            };
-
-            const darkThemeSettings = {
-                'bg-color': '#f0f0f0',
-                'frame-color': '#333333',
-                'text-color': '#000000',
-                'button-bg': '#e0e0e0',
-                'button-text': '#000000',
-                'settings-bg': '#ffffff',
-                'settings-outline': '#cccccc',
-                'slider-track': '#dddddd',
-                'slider-thumb': '#666666',
-                'checkbox-color': '#666666',
-                'frame-radius': '5',
-                'button-radius': '30',
-                'settings-radius': '3',
-                'font-family': "'Monospace', monospace",
-                'font-size': '14',
-                'in-frame-ui-scale': '1',
-                'number-input-bg': '#ffffff',
-                'number-input-outline-color': '#cccccc',
-                'number-input-outline-radius': '5',
-                'frame-custom-size': '400',
-                'frame-custom-min-size': '300',
-                'table-header-bg': '#f5f5f5',
-                'table-row-bg-odd': '#ffffff',
-                'table-row-bg-even': '#f9f9f9',
-                'table-border-color': '#e0e0e0',
-                'color-outline-color': '#0000ff',
-                'copy-btn-hover-bg': 'rgba(0,0,0,0.05)',
-                'skin-tone-result-text-color': '#000000',
-                'delete-button-bg': '#ff4d4d',
-                'delete-button-text': '#ffffff',
-                'delete-button-hover-bg': '#cc0000',
-                'suggested-palette-outline': '#888888',
-                'hair-color-select': 'dark_brown',
-                'eye-color-select': 'dark_brown'
+            const defaultSettings = {'bg-color':'#f0f0f0','frame-color':'#333333','text-color':'#000000','button-bg':'#e0e0e0','button-text':'#333333','settings-bg':'#ffffff','settings-outline':'#cccccc','slider-track':'#dddddd','slider-thumb':'#666666','checkbox-color':'#666666','frame-radius':'5','button-radius':'30','settings-radius':'3','font-family':"'Monospace', monospace",'font-size':'14','in-frame-ui-scale':'1','number-input-bg':'#ffffff','number-input-outline-color':'#cccccc','number-input-outline-radius':'6','frame-custom-size':'400','frame-custom-min-size':'300','table-header-bg':'#f5f5f5','table-row-bg-odd':'#ffffff','table-row-bg-even':'#f9f9f9','table-border-color':'#e0e0e0','color-outline-color':'#0000ff','copy-btn-hover-bg':'rgba(0,0,0,0.05)','delete-button-bg':'#ff4d4d','delete-button-text':'#ffffff','delete-button-hover-bg':'#cc0000'};
+            const darkThemeSettings = {'bg-color':'#000000','frame-color':'#888888','text-color':'#e0e0e0','button-bg':'#121211','button-text':'#e0e0e0','settings-bg':'#121211','settings-outline':'#444444','slider-track':'#555555','slider-thumb':'#aaaaaa','checkbox-color':'#aaaaaa','table-header-bg':'#3a3a3a','table-row-bg-odd':'#2a2a2a','table-row-bg-even':'#303030','table-border-color':'#444444','color-outline-color':'#9999ff','copy-btn-hover-bg':'rgba(255,255,255,0.1)','number-input-bg':'#3a3a3a','number-input-outline-color':'#555555','delete-button-bg':'#993333','delete-button-hover-bg':'#cc0000'};
+            const defaultPaletteSettings = {
+                'num-colors': '10',
+                'show-all-colors': '30',
+                'sample-size': '0.5'
             };
             
-            const undertoneReferenceColors = {
-                'Warm': ['#F6D4B9','#CD865A', '#B37858', '#96624D', '#552E1F', '#D39F66','#BD8E5A'],
-                'Neutral': ['#60311F','#A16F4C','#BB815C','#BC8F68','#CA9978','#D6AA8D','#DCBA9E','#F3D7C2'],
-                'Cool': ['#F0CBB0', '#E4C9B6', '#DFBDA2', '#D6A98A','#D6AA8D','#D5AA8B','#D6A98B', '#B77E53', '#653728', '#533624', '#DFAB9D', '#AE6B52', '#E0A18F', '#D38467', '#C15B4D', '#D37329', '#C3582C', '#BF784E', '#D5A88B', '#EAD5C2', '#DFA57D', '#E29060'],
-				'Olive': ['#8A7559', '#B6996F', '#9C7E5A', '#C7AA7C', '#C8AD83', '#D8C3A8', '#F4C197', '#DDC898', '#B7874D', '#D6A667', '#D09A58', '#D9B591', '#BD8E5A', '#A6907B']
-            };
-            
-            let referenceLabColors = {};
-
             settingsButton.addEventListener('click', () => togglePanel(settingsPanel));
             paletteSettingsButton.addEventListener('click', () => togglePanel(paletteAnalysisPanel, true));
             layoutButton.addEventListener('click', toggleManualLayout);
@@ -1429,118 +1272,46 @@
                     togglePanel(paletteAnalysisPanel, true);
                 }
             });
-            pickColorButton.addEventListener('click', () => toggleEyedropper(false));
-            pickSkinToneButton.addEventListener('click', () => toggleEyedropper(true));
+            pickColorButton.addEventListener('click', () => toggleEyedropper());
             exportButton.addEventListener('click', exportResults);
             applyGeneralSettingsBtn.addEventListener('click', applyGeneralSettings);
             resetSettingsBtn.addEventListener('click', resetSettingsToDefault);
             themeToggleButton.addEventListener('click', toggleTheme);
-            
             swapPanelsButton.addEventListener('click', () => mainContainer.classList.toggle('swapped'));
-            
             hideFrameUiButton.addEventListener('click', () => {
                 frame.classList.toggle('ui-hidden');
                 controlsDiv.classList.toggle('minimized');
             });
-
             fullscreenButton.addEventListener('click', toggleFullscreen);
             hideUiButton.addEventListener('click', () => frame.classList.toggle('ui-hidden'));
-
-            paletteSettingsInputs.forEach(input => {
-                input.addEventListener('input', () => {
-                    if (originalImage) extractColorPalette(originalImage);
-                    saveSettings();
-                });
-            });
-
-            hairColorSelect.addEventListener('change', () => {
-                if (currentSkinToneInfo) analyzeSeason();
-                saveSettings();
-            });
-            eyeColorSelect.addEventListener('change', () => {
-                if (currentSkinToneInfo) analyzeSeason();
-                saveSettings();
-            });
-
-            customColorButton.addEventListener('click', () => {
-                customColorPanel.style.display = 'block';
-            });
-
-            addCustomColorButton.addEventListener('click', () => {
-                const hex = customColorPicker.value;
-                const rgb = hexToRgb(hex);
-                const color = {
-                    rgb: rgb,
-                    hex: hex,
-                    hsl: rgbToHsl(rgb[0], rgb[1], rgb[2]),
-                    cmyk: rgbToCmyk(rgb[0], rgb[1], rgb[2])
-                };
-                addColorToPalette(color);
-                customColorPanel.style.display = 'none';
-            });
-
-            cancelCustomColorButton.addEventListener('click', () => {
-                customColorPanel.style.display = 'none';
-            });
-
-            codeInputButton.addEventListener('click', () => {
-                colorCodeInput.value = '';
-                codeInputPanel.style.display = 'block';
-            });
-
-            addCodeColorButton.addEventListener('click', () => {
-                const input = colorCodeInput.value.trim();
-                if (!input) return;
-
-                let rgb;
-                if (input.startsWith('#')) {
-                    rgb = hexToRgb(input);
-                } else if (input.startsWith('rgb(')) {
-                    const matches = input.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/i);
-                    if (matches && matches.length === 4) {
-                        rgb = [parseInt(matches[1]), parseInt(matches[2]), parseInt(matches[3])];
-                    }
-                } else if (input.startsWith('hsl(')) {
-                    const matches = input.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/i);
-                    if (matches && matches.length === 4) {
-                        const hsl = {
-                            h: parseInt(matches[1]),
-                            s: parseInt(matches[2]),
-                            l: parseInt(matches[3])
-                        };
-                        rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
-                    }
-                }
-
-                if (rgb) {
-                    const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
-                    const color = {
-                        rgb: rgb,
-                        hex: hex,
-                        hsl: rgbToHsl(rgb[0], rgb[1], rgb[2]),
-                        cmyk: rgbToCmyk(rgb[0], rgb[1], rgb[2])
-                    };
-                    addColorToPalette(color);
-                    codeInputPanel.style.display = 'none';
-                } else {
-                    alert('Invalid color format. Please use hex (#RRGGBB), rgb(r, g, b), or hsl(h, s%, l%) format.');
+            
+            numColorsInput.addEventListener('input', () => {
+                numColorsNumInput.value = numColorsInput.value;
+                if(parseInt(numColorsInput.value) > 30 && !hasShownPerformanceWarning) {
+                    alert('Warning: Extracting a high number of colors may impact performance, especially on large images.');
+                    hasShownPerformanceWarning = true;
                 }
             });
 
-            cancelCodeInputButton.addEventListener('click', () => {
-                codeInputPanel.style.display = 'none';
+            showAllColorsInput.addEventListener('input', () => {
+                showAllColorsNumInput.value = showAllColorsInput.value;
+            });
+            
+            sampleSizeInput.addEventListener('input', () => {
+                sampleSizeNumInput.value = sampleSizeInput.value;
+            });
+            
+            toggleViewButton.addEventListener('click', () => {
+                isGridView = !isGridView;
+                tableViewWrapper.style.display = isGridView ? 'none' : 'block';
+                gridViewWrapper.style.display = isGridView ? 'block' : 'none';
+                toggleViewButton.textContent = isGridView ? 'Default' : 'Show All';
+                if (originalImage) {
+                    extractColorPalette(originalImage);
+                }
             });
 
-            document.querySelector('#color-palette-table th:nth-child(2)').addEventListener('click', () => {
-                const formatOrder = ['hex', 'rgb', 'hsl', 'cmyk'];
-                const currentIndex = formatOrder.indexOf(currentColorFormat);
-                currentColorFormat = formatOrder[(currentIndex + 1) % formatOrder.length];
-                
-                const header = document.querySelector('#color-palette-table th:nth-child(2)');
-                header.textContent = currentColorFormat.toUpperCase() + ' ▽';
-                
-                updatePaletteDisplay();
-            });
+            [tableFormatToggle, gridViewFormatToggle].forEach(el => el.addEventListener('click', cycleColorFormat));
 
             document.querySelectorAll('.slider-input-group').forEach(group => {
                 const slider = group.querySelector('input[type="range"]');
@@ -1551,21 +1322,42 @@
                 }
             });
 
+            customColorButton.addEventListener('click', () => { customColorPanel.style.display = 'block'; });
+            cancelCustomColorButton.addEventListener('click', () => { customColorPanel.style.display = 'none'; });
+            addCustomColorButton.addEventListener('click', () => {
+                const hex = customColorPicker.value;
+                const rgb = hexToRgb(hex);
+                if (!rgb) return;
+                const color = {rgb: rgb, hex: hex, hsl: rgbToHsl(rgb[0], rgb[1], rgb[2]), cmyk: rgbToCmyk(rgb[0], rgb[1], rgb[2])};
+                addColorToPalette(color);
+                analyzeColorUndertone(color.rgb);
+                customColorPanel.style.display = 'none';
+            });
+            
+            codeInputButton.addEventListener('click', () => { colorCodeInput.value = ''; codeInputPanel.style.display = 'block'; });
+            cancelCodeInputButton.addEventListener('click', () => { codeInputPanel.style.display = 'none'; });
+            addCodeColorButton.addEventListener('click', () => {
+                const input = colorCodeInput.value.trim();
+                if (!input) return;
+                let rgb;
+                if (input.startsWith('#')) rgb = hexToRgb(input);
+                else if (input.startsWith('rgb')) rgb = input.match(/\d+/g).map(Number);
+                else if (input.startsWith('hsl')) rgb = hslToRgb(...input.match(/\d+/g).map(Number));
+
+                if (rgb && rgb.length === 3) {
+                    const hex = rgbToHex(...rgb);
+                    const color = {rgb: rgb, hex: hex, hsl: rgbToHsl(...rgb), cmyk: rgbToCmyk(...rgb)};
+                    addColorToPalette(color);
+                    analyzeColorUndertone(color.rgb);
+                    codeInputPanel.style.display = 'none';
+                } else alert('Invalid color format.');
+            });
+
             window.addEventListener('resize', checkLayout);
             document.addEventListener('click', closePanelsOnClickOutside);
-
-            if (window.visualViewport) {
-                window.visualViewport.addEventListener('resize', () => {
-                    const newIsKeyboardOpen = window.visualViewport.height < window.innerHeight;
-                    if (newIsKeyboardOpen !== isKeyboardOpen) {
-                        isKeyboardOpen = newIsKeyboardOpen;
-                    }
-                });
-            }
-
+            if (window.visualViewport) window.visualViewport.addEventListener('resize', () => { isKeyboardOpen = window.visualViewport.height < window.innerHeight; });
             dragHandle.addEventListener('mousedown', dragStart);
             dragHandle.addEventListener('touchstart', dragStart);
-
             imageDisplay.addEventListener('mousemove', handleEyedropperMove);
             imageDisplay.addEventListener('touchmove', handleEyedropperMove, { passive: false });
             imageDisplay.addEventListener('mouseup', handleEyedropperConfirmSelection);
@@ -1573,107 +1365,83 @@
             imageDisplay.addEventListener('mouseleave', hideMagnifier);
             imageDisplay.addEventListener('touchcancel', hideMagnifier);
 
-            function preProcessReferenceColors() {
-                for (const tone in undertoneReferenceColors) {
-                    referenceLabColors[tone] = undertoneReferenceColors[tone].map(hex => {
-                        const rgb = hexToRgb(hex.trim());
-                        return rgbToLab(rgb[0], rgb[1], rgb[2]);
-                    });
+            function cycleColorFormat() {
+                const formatOrder = ['hex', 'rgb', 'hsl', 'cmyk'];
+                currentColorFormat = formatOrder[(formatOrder.indexOf(currentColorFormat) + 1) % formatOrder.length];
+                updateFormatDisplays();
+            }
+
+            function updateFormatDisplays() {
+                const text = currentColorFormat.toUpperCase() + ' ▽';
+                tableFormatToggle.textContent = text;
+                gridViewFormatToggle.textContent = text;
+                if (isGridView) {
+                    updateGridTooltips();
+                } else {
+                    updatePaletteDisplay();
                 }
             }
-            
+
             function addColorToPalette(color) {
-                const isDuplicate = currentPalette.some(c => c.hex === color.hex);
-                if (!isDuplicate) {
+                if (!currentPalette.some(c => c.hex === color.hex)) {
                     currentPalette.push(color);
-                    currentPalette.sort((a, b) => {
-                        const brightnessA = (a.rgb[0] * 299 + a.rgb[1] * 587 + a.rgb[2] * 114) / 1000;
-                        const brightnessB = (b.rgb[0] * 299 + b.rgb[1] * 587 + b.rgb[2] * 114) / 1000;
-                        return brightnessB - brightnessA;
-                    });
+                    currentPalette.sort((a, b) => ((a.rgb[0]*0.299 + a.rgb[1]*0.587 + a.rgb[2]*0.114) - (b.rgb[0]*0.299 + b.rgb[1]*0.587 + b.rgb[2]*0.114)));
                     displayPalette(currentPalette);
                 }
             }
             
             function updatePaletteDisplay() {
                 paletteTableBody.innerHTML = '';
-                currentPalette.forEach(color => {
-                    addPaletteRow(color);
+                currentPalette.forEach(addPaletteRow);
+            }
+
+            function updateGridTooltips() {
+                document.querySelectorAll('.grid-swatch').forEach(swatch => {
+                    const hex = swatch.dataset.hex;
+                    const color = currentPalette.find(c => c.hex === hex);
+                    if (color) swatch.dataset.colorCode = getColorCodeString(color);
                 });
             }
 
-            function preProcessReferenceColors() {
-                for (const tone in undertoneReferenceColors) {
-                    referenceLabColors[tone] = undertoneReferenceColors[tone].map(hex => {
-                        const rgb = hexToRgb(hex.trim());
-                        return rgbToLab(rgb[0], rgb[1], rgb[2]);
-                    });
-                }
-            }
-            
-            preProcessReferenceColors();
             loadSettings();
             applyGeneralSettings();
             checkLayout();
 
             function toggleTheme() {
-                const body = document.body;
                 isDarkTheme = !isDarkTheme;
-                body.classList.toggle('dark-theme', isDarkTheme);
+                document.body.classList.toggle('dark-theme', isDarkTheme);
                 themeToggleButton.textContent = isDarkTheme ? 'Dark' : 'Light';
-
-                const currentThemeSettings = isDarkTheme ? darkThemeSettings : defaultSettings;
-                for (const key in currentThemeSettings) {
-                    if (key.endsWith('-color') || key.endsWith('-bg')) {
-                        const inputElement = document.getElementById(key);
-                        if (inputElement && inputElement.type === 'color') {
-                            inputElement.value = currentThemeSettings[key];
-                        }
-                    }
+                const themeToApply = isDarkTheme ? {...defaultSettings, ...darkThemeSettings} : defaultSettings;
+                for (const key in themeToApply) {
+                    const inputEl = getEl(key);
+                    if(inputEl) inputEl.value = themeToApply[key];
                 }
-                saveSettings();
+                applyGeneralSettings(); 
             }
 
             function handleFileUpload(event) {
                 const file = event.target.files[0];
-                if (!file) {
-                    return;
-                }
-
+                if (!file) return;
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     uploadedImage.src = e.target.result;
                     uploadedImage.style.display = 'block';
                     placeholderText.style.display = 'none';
                     originalImage = uploadedImage;
-                    
                     uploadedImage.onload = () => {
                         extractColorPalette(originalImage);
-                        if (paletteAnalysisPanel.style.display === 'none') {
-                            togglePanel(paletteAnalysisPanel, true);
-                        }
+                        if (paletteAnalysisPanel.style.display === 'none') togglePanel(paletteAnalysisPanel, true);
                     };
-                    uploadedImage.onerror = () => {
-                        alert('Error: Could not load image.');
-                        uploadedImage.src = '';
-                        uploadedImage.style.display = 'none';
-                        placeholderText.style.display = 'block';
-                        originalImage = null;
-                    };
+                    uploadedImage.onerror = () => { alert('Error: Could not load image.'); uploadedImage.src = ''; uploadedImage.style.display = 'none'; placeholderText.style.display = 'block'; originalImage = null; };
                 };
                 reader.readAsDataURL(file);
             }
 
             function extractColorPalette(imgElement) {
-                if (!imgElement || !imgElement.naturalWidth) {
-                    paletteTableBody.innerHTML = '<tr><td colspan="3">No image loaded to extract palette.</td></tr>';
-                    currentPalette = [];
-                    return;
-                }
+                if (!imgElement || !imgElement.naturalWidth) return;
                 
-                const numColors = parseInt(numColorsInput.value, 10);
+                const numColors = isGridView ? parseInt(showAllColorsInput.value) : parseInt(numColorsInput.value);
                 const sampleSize = parseFloat(sampleSizeInput.value);
-
                 const ctx = hiddenCtx;
                 const scaleFactor = Math.min(1, 1000 / Math.max(imgElement.naturalWidth, imgElement.naturalHeight));
                 hiddenCanvas.width = imgElement.naturalWidth * scaleFactor;
@@ -1683,159 +1451,106 @@
                 const imageData = ctx.getImageData(0, 0, hiddenCanvas.width, hiddenCanvas.height);
                 const pixels = imageData.data;
                 const pixelCount = hiddenCanvas.width * hiddenCanvas.height;
-
                 const colors = [];
                 const step = Math.max(1, Math.floor(1 / sampleSize));
 
                 for (let i = 0; i < pixelCount; i += step) {
                     const idx = i * 4;
-                    const r = pixels[idx];
-                    const g = pixels[idx + 1];
-                    const b = pixels[idx + 2];
-                    if (typeof r === 'number' && typeof g === 'number' && typeof b === 'number') {
-                        colors.push([r, g, b]);
+                    colors.push([pixels[idx], pixels[idx + 1], pixels[idx + 2]]);
+                }
+                if (colors.length === 0) return;
+
+                let centroids = [colors[Math.floor(Math.random() * colors.length)]];
+                for (let k = 1; k < numColors; k++) {
+                    let distances = colors.map(color => Math.min(...centroids.map(c => colorDistance(color, c))) ** 2);
+                    let totalDistance = distances.reduce((a, b) => a + b, 0);
+                    let r = Math.random() * totalDistance;
+                    let newCentroid = colors[colors.length - 1];
+                    for (let i = 0; i < colors.length; i++) {
+                        r -= distances[i];
+                        if (r <= 0) { newCentroid = colors[i]; break; }
                     }
+                    centroids.push(newCentroid);
                 }
 
-                if (colors.length === 0) {
-                     paletteTableBody.innerHTML = '<tr><td colspan="3">No color data found in image.</td></tr>';
-                     currentPalette = [];
-                     return;
-                }
-
-                let centroids = [];
-                if (colors.length > 0) {
-                    centroids.push(colors[Math.floor(Math.random() * colors.length)]);
-                    for (let k = 1; k < numColors; k++) {
-                        let distances = [];
-                        let totalDistance = 0;
-                        for (const color of colors) {
-                            let minDistToCentroids = Infinity;
-                            for (const centroid of centroids) {
-                                minDistToCentroids = Math.min(minDistToCentroids, colorDistance(color, centroid));
-                            }
-                            distances.push(minDistToCentroids * minDistToCentroids);
-                            totalDistance += minDistToCentroids * minDistToCentroids;
-                        }
-
-                        let r = Math.random() * totalDistance;
-                        let newCentroid = null;
-                        for (let i = 0; i < colors.length; i++) {
-                            r -= distances[i];
-                            if (r <= 0) {
-                                newCentroid = colors[i];
-                                break;
-                            }
-                        }
-                        if (newCentroid) {
-                            centroids.push(newCentroid);
-                        } else {
-                            centroids.push(colors[Math.floor(Math.random() * colors.length)]);
-                        }
-                    }
-                }
-
-                const maxIterations = 20;
-                for (let iter = 0; iter < maxIterations; iter++) {
+                for (let iter = 0; iter < 20; iter++) {
                     const clusters = Array.from({ length: numColors }, () => []);
                     for (const color of colors) {
-                        let minDist = Infinity;
-                        let bestCentroidIdx = -1;
+                        let bestIdx = 0, minDist = Infinity;
                         for (let i = 0; i < numColors; i++) {
                             const dist = colorDistance(color, centroids[i]);
-                            if (dist < minDist) {
-                                minDist = dist;
-                                bestCentroidIdx = i;
-                            }
+                            if (dist < minDist) { minDist = dist; bestIdx = i; }
                         }
-                        if (bestCentroidIdx !== -1) {
-                            clusters[bestCentroidIdx].push(color);
-                        }
+                        clusters[bestIdx].push(color);
                     }
-
-                    let newCentroids = [];
-                    let changed = false;
+                    let newCentroids = [], changed = false;
                     for (let i = 0; i < numColors; i++) {
-                        if (clusters[i].length > 0) {
-                            const newCentroid = calculateMeanColor(clusters[i]);
-                            if (colorDistance(newCentroid, centroids[i]) > 1) {
-                                changed = true;
-                            }
-                            newCentroids.push(newCentroid);
-                        } else {
-                            newCentroids.push(colors[Math.floor(Math.random() * colors.length)]);
-                            changed = true;
-                        }
+                        const newCentroid = clusters[i].length > 0 ? calculateMeanColor(clusters[i]) : colors[Math.floor(Math.random() * colors.length)];
+                        if (colorDistance(newCentroid, centroids[i]) > 1) changed = true;
+                        newCentroids.push(newCentroid);
                     }
                     centroids = newCentroids;
                     if (!changed) break;
                 }
-
-                centroids.sort((a, b) => {
-                    const brightnessA = (a[0] * 299 + a[1] * 587 + a[2] * 114) / 1000;
-                    const brightnessB = (b[0] * 299 + b[1] * 587 + b[2] * 114) / 1000;
-                    return brightnessB - brightnessA;
-                });
-
-                currentPalette = centroids.map(rgb => {
-                    const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
-                    const hsl = rgbToHsl(rgb[0], rgb[1], rgb[2]);
-                    const cmyk = rgbToCmyk(rgb[0], rgb[1], rgb[2]);
-                    return { rgb: rgb, hex: hex, hsl: hsl, cmyk: cmyk };
-                });
-
+                
+                centroids.sort((a, b) => (a[0]*0.299 + a[1]*0.587 + a[2]*0.114) - (b[0]*0.299 + b[1]*0.587 + b[2]*0.114));
+                currentPalette = centroids.map(rgb => ({rgb, hex: rgbToHex(...rgb), hsl: rgbToHsl(...rgb), cmyk: rgbToCmyk(...rgb)}));
                 displayPalette(currentPalette);
             }
 
             function displayPalette(palette) {
                 paletteTableBody.innerHTML = '';
+                gridContainer.innerHTML = '';
+                if (palette.length === 0) return;
 
-                if (palette.length === 0) {
-                    paletteTableBody.innerHTML = '<tr><td colspan="3">No palette extracted.</td></tr>';
-                    return;
+                if (isGridView) {
+                    palette.forEach(color => {
+                        const swatch = document.createElement('div');
+                        swatch.className = 'grid-swatch';
+                        swatch.style.backgroundColor = color.hex;
+                        swatch.dataset.hex = color.hex;
+                        swatch.dataset.colorCode = getColorCodeString(color);
+                        swatch.addEventListener('click', () => {
+                            analyzeColorUndertone(color.rgb);
+                            copyTextToClipboard(getColorCodeString(color));
+                        });
+                        gridContainer.appendChild(swatch);
+                    });
+                } else {
+                    palette.forEach(addPaletteRow);
                 }
-
-                palette.forEach((color) => {
-                    addPaletteRow(color);
-                });
+            }
+            
+            function getColorCodeString(color) {
+                switch(currentColorFormat) {
+                    case 'hex': return color.hex;
+                    case 'rgb': return `rgb(${color.rgb[0]},${color.rgb[1]},${color.rgb[2]})`;
+                    case 'hsl': return `hsl(${Math.round(color.hsl.h)},${Math.round(color.hsl.s)}%,${Math.round(color.hsl.l)}%)`;
+                    case 'cmyk': return `cmyk(${Math.round(color.cmyk.c)}%,${Math.round(color.cmyk.m)}%,${Math.round(color.cmyk.y)}%,${Math.round(color.cmyk.k)}%)`;
+                    default: return color.hex;
+                }
             }
 
             function addPaletteRow(color) {
                 const row = paletteTableBody.insertRow();
-                row.dataset.colorHex = color.hex;
-
                 const colorSampleCell = row.insertCell();
-                colorSampleCell.classList.add('color-sample-cell');
+                colorSampleCell.className = 'color-sample-cell';
                 const colorSampleDiv = document.createElement('div');
                 colorSampleDiv.className = 'color-sample';
-                colorSampleDiv.style.backgroundColor = `rgb(${color.rgb[0]},${color.rgb[1]},${color.rgb[2]})`;
+                colorSampleDiv.style.backgroundColor = color.hex;
+                colorSampleDiv.addEventListener('click', () => analyzeColorUndertone(color.rgb));
                 colorSampleCell.appendChild(colorSampleDiv);
 
                 const hexCell = row.insertCell();
-                let displayText = '';
-                switch(currentColorFormat) {
-                    case 'hex':
-                        displayText = color.hex;
-                        break;
-                    case 'rgb':
-                        displayText = `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]})`;
-                        break;
-                    case 'hsl':
-                        displayText = `hsl(${Math.round(color.hsl.h)}, ${Math.round(color.hsl.s)}%, ${Math.round(color.hsl.l)}%)`;
-                        break;
-                    case 'cmyk':
-                        displayText = `cmyk(${Math.round(color.cmyk.c)}%, ${Math.round(color.cmyk.m)}%, ${Math.round(color.cmyk.y)}%, ${Math.round(color.cmyk.k)}%)`;
-                        break;
-                }
-                hexCell.innerHTML = `<span class="color-value">${displayText}</span>`;
-                hexCell.querySelector('.color-value').addEventListener('click', (e) => {
-                    copyTextToClipboard(displayText);
+                hexCell.innerHTML = `<span class="color-value">${getColorCodeString(color)}</span>`;
+                hexCell.querySelector('.color-value').addEventListener('click', () => {
+                    copyTextToClipboard(getColorCodeString(color));
                     showColorLocation(color.rgb);
                 });
 
                 const delCell = row.insertCell();
                 const delButton = document.createElement('button');
-                delButton.classList.add('delete-btn');
+                delButton.className = 'delete-btn';
                 delButton.textContent = 'DEL';
                 delButton.addEventListener('click', () => deleteColorFromPalette(color.hex, row));
                 delCell.appendChild(delButton);
@@ -1848,1502 +1563,259 @@
 
             function copyTextToClipboard(text) {
                 if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        showCopyNotification();
-                    }).catch(() => {
-                        fallbackCopyTextToClipboard(text);
-                    });
+                    navigator.clipboard.writeText(text).then(showCopyNotification).catch(() => fallbackCopyTextToClipboard(text));
                 } else {
                     fallbackCopyTextToClipboard(text);
                 }
             }
 
             function fallbackCopyTextToClipboard(text) {
-                const textArea = document.createElement("textarea");
-                textArea.value = text;
-                textArea.style.position = "fixed";
-                textArea.style.left = "-999999px";
-                textArea.style.top = "-999999px";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try {
-                    const successful = document.execCommand('copy');
-                    if (successful) {
-                        showCopyNotification();
-                    } else {
-                        alert('Copy failed: Your browser does not support automatic copying for local files. Please manually copy the text: ' + text);
-                    }
-                } catch (err) {
-                    alert('Copy failed: Your browser does not support automatic copying for local files. Please manually copy the text: ' + text);
-                }
-                document.body.removeChild(textArea);
+                const ta = document.createElement("textarea");
+                ta.value = text; ta.style.position="fixed"; ta.style.left="-9999px";
+                document.body.appendChild(ta); ta.select();
+                try { if (document.execCommand('copy')) showCopyNotification(); } catch (err) {}
+                document.body.removeChild(ta);
             }
 
             function showCopyNotification() {
                 copyNotification.style.opacity = '1';
                 clearTimeout(copyNotification._timeoutId);
-                copyNotification._timeoutId = setTimeout(() => {
-                    copyNotification.style.opacity = '0';
-                }, 1500);
+                copyNotification._timeoutId = setTimeout(() => { copyNotification.style.opacity = '0'; }, 1500);
             }
 
             function showColorLocation(targetRgb) {
-                if (!originalImage || !originalImage.naturalWidth) return;
-
+                if (!originalImage) return;
                 document.querySelectorAll('.color-location-indicator').forEach(el => el.remove());
-
-                const imgNaturalWidth = originalImage.naturalWidth;
-                const imgNaturalHeight = originalImage.naturalHeight;
-
-                hiddenCanvas.width = imgNaturalWidth;
-                hiddenCanvas.height = imgNaturalHeight;
-                hiddenCtx.drawImage(originalImage, 0, 0, imgNaturalWidth, imgNaturalHeight);
-                const imageData = hiddenCtx.getImageData(0, 0, imgNaturalWidth, imgNaturalHeight);
-                const pixels = imageData.data;
-
-                const tolerance = 20;
-                const maxLocations = 5;
-                const minDistanceBetweenIndicators = 50; 
-
-                const matchingLocations = [];
-
+                const {naturalWidth: w, naturalHeight: h} = originalImage;
+                hiddenCanvas.width = w; hiddenCanvas.height = h;
+                hiddenCtx.drawImage(originalImage, 0, 0, w, h);
+                const pixels = hiddenCtx.getImageData(0, 0, w, h).data;
+                const locations = [], max = 5, tolerance = 20;
                 for (let i = 0; i < pixels.length; i += 4) {
-                    const r = pixels[i];
-                    const g = pixels[i + 1];
-                    const b = pixels[i + 2];
-
-                    const dist = colorDistance([r, g, b], targetRgb);
-
-                    if (dist < tolerance) {
-                        const x = (i / 4) % imgNaturalWidth;
-                        const y = Math.floor((i / 4) / imgNaturalWidth);
-
-                        let tooClose = false;
-                        for (const existingLoc of matchingLocations) {
-                            if (Math.sqrt(Math.pow(x - existingLoc.x, 2) + Math.pow(y - existingLoc.y, 2)) < minDistanceBetweenIndicators) {
-                                tooClose = true;
-                                break;
-                            }
-                        }
-
-                        if (!tooClose) {
-                            matchingLocations.push({ x, y });
-                            if (matchingLocations.length >= maxLocations) break;
+                    if (colorDistance([pixels[i], pixels[i+1], pixels[i+2]], targetRgb) < tolerance) {
+                        const x = (i/4) % w, y = Math.floor((i/4)/w);
+                        if (!locations.some(l=>Math.hypot(x-l.x, y-l.y)<50)) {
+                            locations.push({x,y});
+                            if (locations.length >= max) break;
                         }
                     }
                 }
-
-                if (matchingLocations.length === 0 && pixels.length > 0) {
-                    let closestDist = Infinity;
-                    let closestLoc = null;
-                    const sampleStep = Math.max(1, Math.floor(pixels.length / (4 * 5000)));
-                    for (let i = 0; i < pixels.length; i += 4 * sampleStep) {
-                        const r = pixels[i];
-                        const g = pixels[i + 1];
-                        const b = pixels[i + 2];
-                        const dist = colorDistance([r, g, b], targetRgb);
-                        if (dist < closestDist) {
-                            closestDist = dist;
-                            const x = (i / 4) % imgNaturalWidth;
-                            const y = Math.floor((i / 4) / imgNaturalWidth);
-                            closestLoc = { x, y };
-                        }
-                    }
-                    if (closestLoc) {
-                         matchingLocations.push(closestLoc);
-                    }
-                }
-
                 const imgRect = uploadedImage.getBoundingClientRect();
-                
-                let actualImageDisplayWidth, actualImageDisplayHeight;
-                let displayOffsetX, displayOffsetY;
-
-                const aspectRatioNatural = imgNaturalWidth / imgNaturalHeight;
-                const aspectRatioDisplay = imgRect.width / imgRect.height;
-
-                if (aspectRatioDisplay > aspectRatioNatural) {
-                    actualImageDisplayHeight = imgRect.height;
-                    actualImageDisplayWidth = imgRect.height * aspectRatioNatural;
-                    displayOffsetX = (imgRect.width - actualImageDisplayWidth) / 2;
-                    displayOffsetY = 0;
-                } else {
-                    actualImageDisplayWidth = imgRect.width;
-                    actualImageDisplayHeight = imgRect.width / aspectRatioNatural;
-                    displayOffsetX = 0;
-                    displayOffsetY = (imgRect.height - actualImageDisplayHeight) / 2;
-                }
-
-                const scaleX = actualImageDisplayWidth / imgNaturalWidth;
-                const scaleY = actualImageDisplayHeight / imgNaturalHeight;
-
-                matchingLocations.forEach(loc => {
-                    const indicator = document.createElement('div');
-                    indicator.classList.add('color-location-indicator');
-                    indicator.textContent = '•';
-
-                    const indicatorX = imgRect.left + displayOffsetX + (loc.x * scaleX);
-                    const indicatorY = imgRect.top + displayOffsetY + (loc.y * scaleY);
-                    
-                    indicator.style.left = `${indicatorX}px`;
-                    indicator.style.top = `${indicatorY}px`;
-                    
-                    document.body.appendChild(indicator); 
+                const aspectNat = w/h, aspectDisp = imgRect.width/imgRect.height;
+                const scale = aspectDisp > aspectNat ? imgRect.height/h : imgRect.width/w;
+                const xOff = (imgRect.width-w*scale)/2, yOff = (imgRect.height-h*scale)/2;
+                locations.forEach(loc => {
+                    const ind = document.createElement('div');
+                    ind.className = 'color-location-indicator'; ind.textContent = '•';
+                    ind.style.left = `${imgRect.left + xOff + loc.x*scale}px`;
+                    ind.style.top = `${imgRect.top + yOff + loc.y*scale}px`;
+                    document.body.appendChild(ind); 
                 });
             }
+
+            function rgbToLab(r,g,b){let r1=r/255,g1=g/255,b1=b/255;r1=r1>0.04045?((r1+0.055)/1.055)**2.4:r1/12.92;g1=g1>0.04045?((g1+0.055)/1.055)**2.4:g1/12.92;b1=b1>0.04045?((b1+0.055)/1.055)**2.4:b1/12.92;r1*=100;g1*=100;b1*=100;let x=r1*0.4124+g1*0.3576+b1*0.1805,y=r1*0.2126+g1*0.7152+b1*0.0722,z=r1*0.0193+g1*0.1192+b1*0.9505;let x1=x/95.047,y1=y/100,z1=z/108.883;x1=x1>0.008856?x1**(1/3):7.787*x1+16/116;y1=y1>0.008856?y1**(1/3):7.787*y1+16/116;z1=z1>0.008856?z1**(1/3):7.787*z1+16/116;return{L:116*y1-16,a:500*(x1-y1),b:200*(y1-z1)}}
             
-            function getDominantColors(colors, k) {
-                if (!colors || colors.length === 0) return [];
-                if (colors.length < k) {
-                    return colors.map(c => [...c]);
+            function analyzeColorUndertone(rgb) {
+                const lab = rgbToLab(...rgb), a = lab.a, bLab = lab.b;
+                let result = { undertone: 'Neutral', explanation: 'A balanced color with no strong warm or cool pull.', suggestions: ['#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3'] };
+                const threshold = 5, dominance = 1.2;
+                if (Math.abs(a) < threshold && Math.abs(bLab) < threshold) { }
+                else if (bLab > threshold && bLab > Math.abs(a)*dominance) result = { undertone: 'Warm', explanation: 'This color has a yellow undertone. Pairs well with complementary cool purples and blues.', suggestions: ['#6A5ACD', '#483D8B', '#4169E1', '#00008B'] };
+                else if (a > threshold && a > Math.abs(bLab)*dominance) result = { undertone: 'Warm', explanation: 'This color has a red undertone. Pairs well with complementary cool greens.', suggestions: ['#2E8B57', '#006400', '#556B2F', '#228B22'] };
+                else if (bLab < -threshold && Math.abs(bLab) > Math.abs(a)*dominance) result = { undertone: 'Cool', explanation: 'This color has a blue undertone. Pairs well with complementary warm oranges and yellows.', suggestions: ['#FFA500', '#FF8C00', '#FFD700', '#F0E68C'] };
+                else if (a < -threshold && Math.abs(a) > Math.abs(bLab)*dominance) result = { undertone: 'Cool', explanation: 'This color has a green undertone. Pairs well with complementary warm reds and magentas.', suggestions: ['#C71585', '#DC143C', '#FF1493', '#8B0000'] };
+                else {
+                    if (a > 0 && bLab > 0) result = { undertone: 'Warm', explanation: 'A warm color with red and yellow undertones (orange/brown). Best matched with cool blues and teals.', suggestions: ['#008080', '#20B2AA', '#48D1CC', '#00CED1'] };
+                    else if (a < 0 && bLab < 0) result = { undertone: 'Cool', explanation: 'A cool color with green and blue undertones (cyan/teal). Best matched with warm reds and oranges.', suggestions: ['#FF4500', '#FF6347', '#E9967A', '#CD5C5C'] };
+                    else if (a > 0 && bLab < 0) result = { undertone: 'Cool', explanation: 'A cool color with red and blue undertones (magenta/purple). Best matched with warm greens and yellows.', suggestions: ['#ADFF2F', '#9ACD32', '#BDB76B', '#F0E68C'] };
+                    else if (a < 0 && bLab > 0) result = { undertone: 'Warm', explanation: 'A warm color with green and yellow undertones (lime/chartreuse). Best matched with cool purples and magentas.', suggestions: ['#9932CC', '#9400D3', '#8A2BE2', '#4B0082'] };
                 }
-
-                let centroids = colors.slice(0, k).map(c => [...c]);
-
-                for (let i = 0; i < 10; i++) {
-                    const clusters = Array.from({ length: k }, () => []);
-                    
-                    for (const color of colors) {
-                        let minDist = Infinity;
-                        let bestCentroidIdx = 0;
-                        for (let j = 0; j < k; j++) {
-                            const dist = colorDistance(color, centroids[j]);
-                            if (dist < minDist) {
-                                minDist = dist;
-                                bestCentroidIdx = j;
-                            }
-                        }
-                        clusters[bestCentroidIdx].push(color);
-                    }
-                    
-                    let newCentroids = [];
-                    for (let j = 0; j < k; j++) {
-                        if (clusters[j].length > 0) {
-                            newCentroids.push(calculateMeanColor(clusters[j]));
-                        } else {
-                            newCentroids.push(colors[Math.floor(Math.random() * colors.length)]);
-                        }
-                    }
-                    centroids = newCentroids;
-                }
-                return centroids;
-            }
-
-            function rgbToLab(r, g, b) {
-                let r1 = r / 255;
-                let g1 = g / 255;
-                let b1 = b / 255;
-
-                r1 = r1 > 0.04045 ? Math.pow((r1 + 0.055) / 1.055, 2.4) : r1 / 12.92;
-                g1 = g1 > 0.04045 ? Math.pow((g1 + 0.055) / 1.055, 2.4) : g1 / 12.92;
-                b1 = b1 > 0.04045 ? Math.pow((b1 + 0.055) / 1.055, 2.4) : b1 / 12.92;
-
-                r1 *= 100;
-                g1 *= 100;
-                b1 *= 100;
-
-                const x = r1 * 0.4124 + g1 * 0.3576 + b1 * 0.1805;
-                const y = r1 * 0.2126 + g1 * 0.7152 + b1 * 0.0722;
-                const z = r1 * 0.0193 + g1 * 0.1192 + b1 * 0.9505;
-
-                let x1 = x / 95.047;
-                let y1 = y / 100.0;
-                let z1 = z / 108.883;
-
-                x1 = x1 > 0.008856 ? Math.pow(x1, 1/3) : (7.787 * x1) + (16 / 116);
-                y1 = y1 > 0.008856 ? Math.pow(y1, 1/3) : (7.787 * y1) + (16 / 116);
-                z1 = z1 > 0.008856 ? Math.pow(z1, 1/3) : (7.787 * z1) + (16 / 116);
-
-                const L = (116 * y1) - 16;
-                const a = 500 * (x1 - y1);
-                const bLab = 200 * (y1 - z1);
-
-                return { L: L, a: a, b: bLab };
+                displayUndertoneAnalysis(result, rgb);
             }
             
-            function labColorDistance(lab1, lab2) {
-                return Math.sqrt(
-                    Math.pow(lab1.L - lab2.L, 2) +
-                    Math.pow(lab1.a - lab2.a, 2) +
-                    Math.pow(lab1.b - lab2.b, 2)
-                );
-            }
-
-            function getSkinToneUndertone(rgbs) {
-                if (rgbs.length === 0) {
-                    return { undertone: 'Undetermined', confidence: 0, explanation: 'No color data provided for analysis.', palettes: [], scores: {} };
-                }
-
-                const centerRgb = rgbs[0]; 
-                const [r, g, b] = centerRgb;
-                const hsl = rgbToHsl(r, g, b);
-                const h = hsl.h;
-                const s = hsl.s;
-                const l = hsl.l;
-                const lab = rgbToLab(r, g, b);
-
-                let bestMatch = { undertone: 'Undetermined', confidence: 0, explanation: 'Could not confidently determine undertone.', palettes: [], scores: {} };
-
-                const undertoneProfiles = {
-                    'Warm': {
-                        hueRanges: [ { min: 25, max: 55 } ],
-                        saturationRange: { min: 20, max: 70 },
-                        lightnessRange: { min: 15, max: 90 },
-                        labARange: { min: 8, max: 30 },
-                        labBRange: { min: 15, max: 60 },
-                        hueWeight: 0.4,
-                        saturationWeight: 0.2,
-                        lightnessWeight: 0.1,
-                        labAWeight: 0.2,
-                        labBWeight: 0.3,
-                        description: "Your skin has golden, peachy, or yellow hues. You'll glow in rich, earthy tones like olive green, mustard, terracotta, warm reds, and deep browns.",
-                        palettes: [
-                            ['#8B4513', '#D2B48C', '#F4A460', '#BDB76B', '#A0522D'],
-                            ['#FFD700', '#DAA520', '#B8860B', '#F0E68C', '#CD853F'],
-                            ['#FF7F50', '#E9967A', '#F08080', '#CD5C5C', '#800000']
-                        ]
-                    },
-                    'Cool': {
-                        hueRanges: [ { min: 330, max: 360 }, { min: 0, max: 20 }, { min: 200, max: 280 } ],
-                        saturationRange: { min: 15, max: 60 },
-                        lightnessRange: { min: 15, max: 90 },
-                        labARange: { min: -10, max: 10 },
-                        labBRange: { min: -20, max: 20 },
-                        hueWeight: 0.3,
-                        saturationWeight: 0.3,
-                        lightnessWeight: 0.15,
-                        labAWeight: 0.3,
-                        labBWeight: 0.4,
-                        description: "Your skin has rosy, pinkish, or bluish hues. Jewel tones and cool shades like navy, emerald greens, cool reds (berry, wine), purples, and true blues will enhance your natural radiance.",
-                        palettes: [
-                            ['#4682B4', '#6A5ACD', '#483D8B', '#000080', '#191970'],
-                            ['#20B2AA', '#40E0D0', '#48D1CC', '#00CED1', '#008B8B'],
-                            ['#C71585', '#DDA0DD', '#BA55D3', '#9400D3', '#4B0082']
-                        ]
-                    },
-                    'Neutral': {
-                        hueRanges: [ { min: 15, max: 35 } ],
-                        saturationRange: { min: 10, max: 45 },
-                        lightnessRange: { min: 15, max: 90 },
-                        labARange: { min: -5, max: 15 },
-                        labBRange: { min: -5, max: 25 },
-                        hueWeight: 0.2,
-                        saturationWeight: 0.1,
-                        lightnessWeight: 0.1,
-                        labAWeight: 0.4,
-                        labBWeight: 0.3,
-                        description: "Your skin has a balanced mix of warm and cool tones, allowing you to wear a wide range of colors beautifully. Soft neutrals like greys, taupes, muted pastels, and medium shades often work best.",
-                        palettes: [
-                            ['#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3', '#F5F5F5'],
-                            ['#B8860B', '#D2B48C', '#E6BE8A', '#F0D1B0', '#F5E4D0'],
-                            ['#B0C4DE', '#87CEEB', '#ADD8E6', '#B0E0E6', '#C6E2FF']
-                        ]
-                    },
-                    'Olive': {
-                        hueRanges: [ { min: 60, max: 120 } ],
-                        saturationRange: { min: 10, max: 50 },
-                        lightnessRange: { min: 20, max: 75 },
-                        labARange: { min: -15, max: 5 },
-                        labBRange: { min: 5, max: 30 },
-                        isOliveCheck: (r, g, b, h_val, s_val) => {
-                            const hasGreenishTint = g > r && g > b && (g > (r + b) / 2 + 10) && (Math.abs(r - b) < 40);
-                            const isGreenishHue = (h_val >= 60 && h_val <= 120) && (s_val >= 10 && s_val <= 50);
-                            const isDesaturated = s_val < 30;
-                            return (hasGreenishTint || isGreenishHue) && isDesaturated;
-                        },
-                        hueWeight: 0.5,
-                        saturationWeight: 0.2,
-                        lightnessWeight: 0.1,
-                        labAWeight: 0.1,
-                        labBWeight: 0.2,
-                        description: "Your skin has a greenish-grey or golden-green hue. You'll look great in earthy, muted, and jewel tones like moss green, deep teal, plum, maroon, and warm browns.",
-                        palettes: [
-                            ['#556B2F', '#6B8E23', '#808000', '#9ACD32', '#ADFF2F'],
-                            ['#483C32', '#696969', '#708090', '#778899', '#B0C4DE'],
-                            ['#8A2BE2', '#9370DB', '#8B008B', '#9932CC', '#6A5ACD']
-                        ]
-                    }
-                };
-
-                let scores = {};
-                let oliveTendency = false;
-                
-                let referenceDistances = {};
-                let totalMinDistance = 0;
-                for (const tone in referenceLabColors) {
-                    let minDistance = Infinity;
-                    if(referenceLabColors[tone]) {
-                        for (const refLab of referenceLabColors[tone]) {
-                            const dist = labColorDistance(lab, refLab);
-                            if (dist < minDistance) {
-                                minDistance = dist;
-                            }
-                        }
-                    }
-                    referenceDistances[tone] = minDistance;
-                    totalMinDistance += minDistance;
-                }
-                const referenceWeight = 0.8;
-
-                for (const type in undertoneProfiles) {
-                    const profile = undertoneProfiles[type];
-                    let score = 0;
-
-                    let hueScore = 0;
-                    for (const range of profile.hueRanges) {
-                        if (range.min <= range.max) {
-                            if (h >= range.min && h <= range.max) { hueScore = 1; break; }
-                        } else {
-                            if (h >= range.min || h <= range.max) { hueScore = 1; break; }
-                        }
-                    }
-                    score += hueScore * profile.hueWeight;
-
-                    if (s >= profile.saturationRange.min && s <= profile.saturationRange.max) score += 1 * profile.saturationWeight;
-                    if (l >= profile.lightnessRange.min && l <= profile.lightnessRange.max) score += 1 * profile.lightnessWeight;
-                    if (lab.a >= profile.labARange.min && lab.a <= profile.labARange.max) score += 1 * profile.labAWeight;
-                    if (lab.b >= profile.labBRange.min && lab.b <= profile.labBRange.max) score += 1 * profile.labBWeight;
-                    if (type === 'Olive' && profile.isOliveCheck(r, g, b, h, s)) score += 0.3;
-                    
-                    if (referenceDistances[type] !== undefined && totalMinDistance > 0) {
-                        const refScoreContribution = (1 - (referenceDistances[type] / totalMinDistance)) * referenceWeight;
-                        if (!isNaN(refScoreContribution)) {
-                            score += refScoreContribution;
-                        }
-                    }
-                    
-                    scores[type] = score;
-                }
-
-                let sortedScores = Object.entries(scores).sort(([,a],[,b]) => b - a);
-                let topUndertones = [];
-                if (sortedScores.length > 0 && sortedScores[0][1] > 0) {
-                    topUndertones.push(sortedScores[0][0]);
-                    for(let i = 1; i < sortedScores.length; i++) {
-                        if (sortedScores[i][1] >= sortedScores[0][1] * 0.7) {
-                            topUndertones.push(sortedScores[i][0]);
-                        } else {
-                            break;
-                        }
-                    }
-                }
-
-                if (!topUndertones.includes('Olive') && undertoneProfiles['Olive'].isOliveCheck(r, g, b, h, s)) {
-                    oliveTendency = true;
-                }
-
-                let finalUndertoneType = 'Undetermined';
-                let finalExplanation = bestMatch.explanation;
-                let suggestedPalettes = [];
-
-                if (topUndertones.length > 0) {
-                    if (topUndertones.includes('Olive')) {
-                         if (topUndertones.includes('Cool')) {
-                            finalUndertoneType = 'Cool Olive';
-                            finalExplanation = "Your skin has a cool olive undertone, combining a greenish cast with pink/bluish hues. Deep jewel tones, cool muted greens, plums, and teals will flatter you.";
-                            suggestedPalettes = undertoneProfiles['Olive'].palettes.concat(undertoneProfiles['Cool'].palettes);
-                        } else if (topUndertones.includes('Warm')) {
-                            finalUndertoneType = 'Warm Olive';
-                            finalExplanation = "Your skin has a warm olive undertone, combining a greenish cast with golden/peachy hues. Earthy tones, warm muted greens, mustards, and coppers will look great.";
-                            suggestedPalettes = undertoneProfiles['Olive'].palettes.concat(undertoneProfiles['Warm'].palettes);
-                        } else if (topUndertones.includes('Neutral')) {
-                            finalUndertoneType = 'Neutral Olive';
-                            finalExplanation = "Your skin has a balanced neutral olive undertone, with a distinct greenish cast without strong warm or cool tendencies. Most muted and earthy tones will suit you well, especially moss greens and charcoal greys.";
-                            suggestedPalettes = undertoneProfiles['Olive'].palettes.concat(undertoneProfiles['Neutral'].palettes);
-                        } else {
-                            finalUndertoneType = 'Olive';
-                            finalExplanation = undertoneProfiles['Olive'].description;
-                            suggestedPalettes = undertoneProfiles['Olive'].palettes;
-                        }
-                    } else {
-                        if (oliveTendency) {
-                            if (topUndertones.includes('Cool')) {
-                                finalUndertoneType = 'Cool (with Olive tendency)';
-                                finalExplanation = "Your skin is primarily cool but has a subtle olive (greenish) tendency. This gives you versatility with both cool colors and some muted earthy tones.";
-                                suggestedPalettes = undertoneProfiles['Cool'].palettes.concat(undertoneProfiles['Olive'].palettes);
-                            } else if (topUndertones.includes('Warm')) {
-                                finalUndertoneType = 'Warm (with Olive tendency)';
-                                finalExplanation = "Your skin is primarily warm but has a subtle olive (greenish) tendency. This means you can lean into warm earthy tones beautifully.";
-                                suggestedPalettes = undertoneProfiles['Warm'].palettes.concat(undertoneProfiles['Olive'].palettes);
-                            } else if (topUndertones.includes('Neutral')) {
-                                finalUndertoneType = 'Neutral (with Olive tendency)';
-                                finalExplanation = "Your skin is primarily neutral but has a subtle olive (greenish) tendency. This is a very versatile undertone, allowing you to wear a wide range of colors.";
-                                suggestedPalettes = undertoneProfiles['Neutral'].palettes.concat(undertoneProfiles['Olive'].palettes);
-                            } else {
-                                finalUndertoneType = topUndertones.join(' & ');
-                                finalExplanation = "Your skin shows characteristics of multiple undertones, including a subtle olive tendency.";
-                                suggestedPalettes = [];
-                            }
-                        } else {
-                            if (topUndertones.length === 1) {
-                                finalUndertoneType = topUndertones[0];
-                                finalExplanation = undertoneProfiles[topUndertones[0]].description;
-                                suggestedPalettes = undertoneProfiles[topUndertones[0]].palettes;
-                            } else {
-                                finalUndertoneType = topUndertones.join(' & ');
-                                finalExplanation = "Your skin tone shows characteristics of multiple undertones. Consider exploring colors that complement a blend of:\n";
-                                suggestedPalettes = [];
-                                topUndertones.forEach(ut => {
-                                    finalExplanation += `\n• ${ut}:\n${undertoneProfiles[ut].description}\n`;
-                                    if (undertoneProfiles[ut].palettes) {
-                                        suggestedPalettes = suggestedPalettes.concat(undertoneProfiles[ut].palettes);
-                                    }
-                                });
-                                finalExplanation += "\nExperimenting with muted or neutral versions of recommended colors can often yield the best results for mixed undertones.";
-                            }
-                        }
-                    }
-
-                    bestMatch.undertone = finalUndertoneType;
-                    bestMatch.confidence = (sortedScores[0][1] / 2.0) * 100;
-                    if (isNaN(bestMatch.confidence)) bestMatch.confidence = 0;
-                    bestMatch.explanation = finalExplanation;
-                    bestMatch.palettes = suggestedPalettes;
-                    bestMatch.scores = scores;
-
+            function displayUndertoneAnalysis(analysis, rgb) {
+                if (rgb) {
+                    const hex = rgbToHex(...rgb);
+                    const suggestionSwatchesHTML = analysis.suggestions.map(c => `<div class="suggestion-swatch" style="background-color:${c}" title="${c}"></div>`).join('');
+                    undertoneResultDiv.innerHTML = `<strong>Analyzed Color: ${hex}</strong><div class="undertone-swatch-container"><div class="analysis-swatch" style="background-color:${hex}"></div><div class="suggestion-swatches">${suggestionSwatchesHTML}</div></div><strong>Undertone: ${analysis.undertone}</strong>${analysis.explanation}`;
                 } else {
-                    bestMatch.undertone = 'Undetermined';
-                    bestMatch.confidence = 0;
-                    bestMatch.explanation = "We couldn't confidently determine your undertone. This can happen with very dark or very light skin tones, or if the chosen color isn't representative. Try picking another spot, perhaps on your jawline or inner arm in natural lighting.";
-                    bestMatch.palettes = [];
-                    bestMatch.scores = {};
-                }
-
-                return bestMatch;
-            }
-
-            function analyzeSkinTone(selectedRgbGroup, centerRgb) {
-                if (!selectedRgbGroup || selectedRgbGroup.length === 0) {
-                    skinToneResult.innerHTML = "Please pick your skin color from the image first.";
-                    currentSkinToneAnalysisResult = "";
-                    currentSkinToneInfo = null;
-                    analyzeSeason();
-                    return;
-                }
-                
-                const dominantSampleColors = getDominantColors(selectedRgbGroup, 3);
-                dominantSampleColors.sort((a, b) => {
-                    const brightnessA = (a[0] * 299 + a[1] * 587 + a[2] * 114) / 1000;
-                    const brightnessB = (b[0] * 299 + b[1] * 587 + b[2] * 114) / 1000;
-                    return brightnessA - brightnessB;
-                });
-
-                let sampledColorsHTML = '<div style="display: flex; gap: 4px; margin-bottom: 8px; margin-top: 5px;">';
-                dominantSampleColors.forEach(rgb => {
-                    const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
-                    sampledColorsHTML += `<div class="palette-color-swatch" title="${hex}" data-hex="${hex}" style="width:25px; height:25px; background-color: ${hex}; cursor:default;"></div>`;
-                });
-                sampledColorsHTML += '</div>';
-
-                const skinToneInfo = getSkinToneUndertone(selectedRgbGroup);
-                const [r, g, b] = centerRgb;
-                const hsl = rgbToHsl(r, g, b);
-                
-                const skinHSL = rgbToHsl(centerRgb[0], centerRgb[1], centerRgb[2]);
-				currentSkinToneInfo = { ...skinToneInfo, hsl: skinHSL, rgb: centerRgb };
-                
-                let suggestedContrast = '';
-                if (skinHSL.l > 70) {
-                    suggestedContrast = 'For lighter skin tones, opting for darker, richer colors will create a beautiful contrast and make your features pop.';
-                } else if (skinHSL.l < 30) {
-                    suggestedContrast = 'On darker skin tones, vibrant and lighter colors often stand out beautifully, while deep tones can add a sense of rich elegance.';
-                } else {
-                    suggestedContrast = 'Medium skin tones are versatile. Consider experimenting with both lighter and darker shades to find the most dynamic contrasts that enhance your natural glow.';
-                }
-                
-                currentSkinToneAnalysisResult = `Selected Color: [ ${rgbToHex(r,g,b)} ]\n\n`;
-                currentSkinToneAnalysisResult += `Detected Undertones: ${skinToneInfo.undertone} (Fidelity: ${skinToneInfo.confidence.toFixed(1)}%)\n\n`;
-                currentSkinToneAnalysisResult += `Color Theory Insights:\n`;
-                currentSkinToneAnalysisResult += `${skinToneInfo.explanation}\n`;
-                currentSkinToneAnalysisResult += `${suggestedContrast}`;
-                
-                const part1HTML = `<strong>Selected Color: ${rgbToHex(r, g, b)} (RGB: ${r}, ${g}, ${b})</strong>` +
-                                sampledColorsHTML +
-                                `<strong>Detected Undertones:</strong> ${skinToneInfo.undertone} [Fidelity: ${skinToneInfo.confidence.toFixed(1)}%]`;
-
-                const part2HTML = `<br><br><strong>Color Theory Insights:</strong><br>${skinToneInfo.explanation}<br><br>${suggestedContrast}`;
-
-                skinToneResult.innerHTML = ''; 
-                skinToneResult.innerHTML += part1HTML.replace(/\n/g, '<br>');
-                
-                const pieChartContainer = document.createElement('div');
-                pieChartContainer.className = 'pie-chart-container';
-
-                const pieChart = document.createElement('div');
-                pieChart.className = 'pie-chart';
-
-                const legend = document.createElement('div');
-                legend.className = 'pie-chart-legend';
-
-                const addLegendItem = (color, label, percent) => {
-                    if (percent > 0.01) {
-                        const item = document.createElement('div');
-                        item.className = 'pie-chart-legend-item';
-                        
-                        const colorBox = document.createElement('div');
-                        colorBox.className = 'pie-chart-legend-color';
-                        colorBox.style.backgroundColor = color;
-                        
-                        const labelSpan = document.createElement('span');
-                        labelSpan.className = 'pie-chart-legend-label';
-                        labelSpan.textContent = label;
-                        
-                        const percentSpan = document.createElement('span');
-                        percentSpan.className = 'pie-chart-legend-percent';
-                        percentSpan.textContent = `${percent.toFixed(2)}%`;
-                        
-                        item.appendChild(colorBox);
-                        item.appendChild(labelSpan);
-                        item.appendChild(percentSpan);
-                        legend.appendChild(item);
-                    }
-                };
-
-                const confidence = skinToneInfo.confidence;
-                const othersPercent = 100 - confidence;
-                const scores = skinToneInfo.scores;
-                const topUndertonesString = skinToneInfo.undertone;
-
-                const undertoneColors = {
-                    'Cool': '#DFAB9D',
-                    'Neutral': '#D6AB8D',
-                    'Warm': '#D38D66',
-                    'Olive': '#9A9E7A',
-                    'Others': '#888888'
-                };
-
-                let gradientString = '';
-                let currentPercentage = 0;
-
-                const topUndertoneNames = Object.keys(undertoneColors).filter(name => name !== 'Others' && topUndertonesString.includes(name));
-
-                if (topUndertoneNames.length > 0) {
-                    const topUndertonesTotalScore = topUndertoneNames.reduce((sum, name) => sum + (scores[name] || 0), 0);
-
-                    if (topUndertonesTotalScore > 0) {
-                        topUndertoneNames.forEach(name => {
-                            const individualScore = scores[name] || 0;
-                            const pieChartPercent = (individualScore / topUndertonesTotalScore) * confidence;
-
-                            if (pieChartPercent > 0) {
-                                gradientString += `${undertoneColors[name]} ${currentPercentage}% ${currentPercentage + pieChartPercent}%, `;
-                                addLegendItem(undertoneColors[name], name, pieChartPercent);
-                                currentPercentage += pieChartPercent;
-                            }
-                        });
-                    }
-                }
-
-                if (othersPercent > 0.01) {
-                    gradientString += `${undertoneColors['Others']} ${currentPercentage}% 100%`;
-                    addLegendItem(undertoneColors['Others'], 'Others', othersPercent);
-                } else {
-                    if (gradientString.endsWith(', ')) {
-                        gradientString = gradientString.slice(0, -2);
-                    }
-                }
-
-                pieChart.style.background = `conic-gradient(${gradientString})`;
-                
-                pieChartContainer.appendChild(pieChart);
-                pieChartContainer.appendChild(legend);
-                
-                skinToneResult.appendChild(pieChartContainer);
-
-                skinToneResult.innerHTML += part2HTML.replace(/\n/g, '<br>');
-
-                displaySuggestedPalettes(skinToneInfo.palettes);
-                
-                analyzeSeason();
-            }
-
-            function displaySuggestedPalettes(palettes, container = skinToneResult, title = 'Suggested Color Palettes:') {
-                let palettesHtml = '';
-                if (palettes && palettes.length > 0) {
-                    palettesHtml += `<div class="suggested-palettes"><h5>${title}</h5>`;
-                    palettes.forEach((palette) => {
-                        palettesHtml += `<div class="color-palette-row">`;
-                        palette.forEach(hex => {
-                            palettesHtml += `<div class="palette-color-swatch" style="background-color: ${hex};" data-hex="${hex}"></div>`;
-                        });
-                        palettesHtml += `</div>`;
-                    });
-                    palettesHtml += '</div>';
-                }
-                
-                const existingPalettesDiv = container.querySelector('.suggested-palettes');
-                if (existingPalettesDiv) {
-                    existingPalettesDiv.remove();
-                }
-
-                if (palettesHtml) {
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = palettesHtml;
-                    container.appendChild(tempDiv.firstChild);
-
-                    container.querySelectorAll('.palette-color-swatch').forEach(swatch => {
-                        swatch.addEventListener('click', (e) => {
-                            copyTextToClipboard(e.target.dataset.hex);
-                        });
-                    });
+                    undertoneResultDiv.innerHTML = 'Select a color to begin analysis.';
                 }
             }
-            
-            function analyzeSeason() {
-                if (!currentSkinToneInfo) {
-                    seasonAnalysisResult.innerHTML = "Pick a skin tone above to begin.";
-                    currentSeasonAnalysisResult = "";
-                    return;
-                }
-
-                const hair = hairColorSelect.value;
-                const eye = eyeColorSelect.value;
-                const undertone = currentSkinToneInfo.undertone.toLowerCase();
-                const skinL = currentSkinToneInfo.hsl.l;
-                const skinS = currentSkinToneInfo.hsl.s;
-
-                const hairValue = { black: 10, dark_brown: 8, light_brown: 5, red: 6, blonde: 3, grey: 4 }[hair];
-                const eyeValue = { black: 10, dark_brown: 8, light_brown: 5, blue: 4, green: 5, grey: 6 }[eye];
-                
-                const overallContrast = Math.abs(hairValue - (skinL / 10));
-                
-                const isClear = skinS > 40 || 
-                               (hair === 'black' || hair === 'red' || hair === 'blonde') || 
-                               (eye === 'blue' || eye === 'green');
-
-                let primarySeason = '';
-                let subSeason = '';
-                
-                if (undertone.includes('cool')) {
-                    if (overallContrast >= 5) {
-                        primarySeason = 'Winter';
-                        subSeason = isClear ? 'Bright Winter' : 'Deep Winter';
-                    } else {
-                        primarySeason = 'Summer';
-                        subSeason = isClear ? 'Light Summer' : (skinL > 60 ? 'Soft Summer' : 'Cool Summer');
-                    }
-                } else if (undertone.includes('warm') || undertone.includes('olive')) {
-                    if (overallContrast >= 4.5) {
-                        primarySeason = 'Spring';
-                        subSeason = isClear ? 'Bright Spring' : 'Warm Spring';
-                    } else {
-                        primarySeason = 'Autumn';
-                        subSeason = isClear ? 'Soft Autumn' : (skinL > 50 ? 'Warm Autumn' : 'Deep Autumn');
-                    }
-                } else {
-                    if (overallContrast >= 5) {
-                        primarySeason = isClear ? 'Bright Spring' : 'Deep Winter';
-                    } else if (overallContrast >= 4) {
-                        primarySeason = isClear ? 'Light Spring' : 'Soft Autumn';
-                    } else {
-                        primarySeason = isClear ? 'Light Summer' : 'Soft Summer';
-                    }
-                    subSeason = primarySeason;
-                }
-                
-                const seasonData = {
-                    'Bright Winter': {
-                        description: "Bright Winters have cool undertones with high contrast and clarity. Your best colors are icy brights and jewel tones like fuchsia, emerald green, royal blue, and pure white. Avoid muted or earthy tones.",
-                        palettes: [
-                            ['#FF00FF', '#00BFFF', '#DC143C', '#FFFFFF', '#000000'],
-                            ['#4B0082', '#008080', '#FF1493', '#7FFFD4', '#9400D3']
-                        ]
-                    },
-                    'Deep Winter': {
-                        description: "Deep Winters have cool undertones with very high contrast between features. Your best colors are deep, rich cool tones like navy, plum, pine green, and ruby red. Avoid pastels and warm earth tones.",
-                        palettes: [
-                            ['#000080', '#8B0000', '#006400', '#4B0082', '#191970'],
-                            ['#483D8B', '#800020', '#2F4F4F', '#8B008B', '#000000']
-                        ]
-                    },
-                    'Cool Summer': {
-                        description: "Cool Summers have soft cool undertones with medium contrast. Your best colors are soft, cool, and muted like powder blue, lavender, rose pink, and slate grey. Avoid bright or warm colors.",
-                        palettes: [
-                            ['#B0C4DE', '#DDA0DD', '#FFB6C1', '#778899', '#E6E6FA'],
-                            ['#4682B4', '#9370DB', '#C71585', '#708090', '#87CEFA']
-                        ]
-                    },
-                    'Light Summer': {
-                        description: "Light Summers have cool undertones with low contrast and a delicate appearance. Your best colors are light, cool, and soft like pastel blue, mauve, seafoam green, and light grey. Avoid dark or intense colors.",
-                        palettes: [
-                            ['#ADD8E6', '#E6E6FA', '#98FB98', '#F0E68C', '#FFB6C1'],
-                            ['#87CEEB', '#D8BFD8', '#AFEEEE', '#FFDAB9', '#DDA0DD']
-                        ]
-                    },
-                    'Soft Summer': {
-                        description: "Soft Summers have neutral-cool undertones with muted, low-contrast features. Your best colors are soft, cool, and greyed like dusty rose, sage green, lavender grey, and soft teal. Avoid bright or warm colors.",
-                        palettes: [
-                            ['#BC8F8F', '#C0C0C0', '#B0E0E6', '#D8BFD8', '#A9A9A9'],
-                            ['#778899', '#9370DB', '#CD5C5C', '#8FBC8F', '#DDA0DD']
-                        ]
-                    },
-                    'Bright Spring': {
-                        description: "Bright Springs have warm undertones with high contrast and clarity. Your best colors are clear, warm, and vibrant like coral, turquoise, lime green, and golden yellow. Avoid muted or cool colors.",
-                        palettes: [
-                            ['#FF4500', '#00CED1', '#32CD32', '#FFD700', '#FF6347'],
-                            ['#FF8C00', '#40E0D0', '#9ACD32', '#FFA500', '#00FA9A']
-                        ]
-                    },
-                    'Warm Spring': {
-                        description: "Warm Springs have golden warm undertones with medium-high contrast. Your best colors are warm and clear like peach, aqua, golden yellow, and camel. Avoid cool or muted colors.",
-                        palettes: [
-                            ['#FFA07A', '#87CEFA', '#F0E68C', '#D2B48C', '#FFDAB9'],
-                            ['#FF7F50', '#00BFFF', '#FFD700', '#CD853F', '#FFE4B5']
-                        ]
-                    },
-                    'Light Spring': {
-                        description: "Light Springs have warm undertones with low contrast and a delicate appearance. Your best colors are light, warm, and clear like peach, butter yellow, aqua, and light camel. Avoid dark or cool colors.",
-                        palettes: [
-                            ['#FFDAB9', '#87CEFA', '#F0E68C', '#FFE4B5', '#FFA07A'],
-                            ['#FFDEAD', '#AFEEEE', '#FAFAD2', '#FFE4C4', '#FFB6C1']
-                        ]
-                    },
-                    'Warm Autumn': {
-                        description: "Warm Autumns have golden warm undertones with medium contrast. Your best colors are rich, warm, and earthy like mustard, burnt orange, olive green, and camel. Avoid cool or bright colors.",
-                        palettes: [
-                            ['#D2691E', '#B8860B', '#556B2F', '#CD853F', '#8B4513'],
-                            ['#A0522D', '#DAA520', '#6B8E23', '#BC8F8F', '#D2B48C']
-                        ]
-                    },
-                    'Soft Autumn': {
-                        description: "Soft Autumns have neutral-warm undertones with muted, low-contrast features. Your best colors are soft, warm, and earthy like mauve, moss green, peach, and soft camel. Avoid bright or cool colors.",
-                        palettes: [
-                            ['#BC8F8F', '#D2B48C', '#8FBC8F', '#CD853F', '#F5DEB3'],
-                            ['#DEB887', '#DAA520', '#98FB98', '#E9967A', '#F0E68C']
-                        ]
-                    },
-                    'Deep Autumn': {
-                        description: "Deep Autumns have warm undertones with very high contrast between features. Your best colors are deep, rich, and warm like burgundy, forest green, burnt orange, and chocolate brown. Avoid pastels and cool colors.",
-                        palettes: [
-                            ['#800000', '#556B2F', '#8B4513', '#4A412A', '#A0522D'],
-                            ['#8B0000', '#2E8B57', '#D2691E', '#483C32', '#8B008B']
-                        ]
-                    }
-                };
-                
-                const result = seasonData[subSeason] || seasonData[primarySeason] || {
-                    description: "Unable to determine sub-season. The general season is " + primarySeason,
-                    palettes: []
-                };
-                
-                let seasonHTML = `<strong>Likely Season:</strong> ${primarySeason}`;
-                if (subSeason && subSeason !== primarySeason) {
-                    seasonHTML += ` (${subSeason})`;
-                }
-                seasonHTML += `\n\n${result.description}`;
-
-                currentSeasonAnalysisResult = `--- Seasonal Analysis ---\n` + seasonHTML;
-
-                seasonAnalysisResult.innerHTML = seasonHTML.replace(/\n/g, '<br>');
-                displaySuggestedPalettes(result.palettes, seasonAnalysisResult, 'Seasonal Color Palettes:');
-            }
-
 
             function exportResults() {
-                let exportContent = `Color Palette Extraction Results\n`;
-                exportContent += `Date: ${new Date().toLocaleString()}\n\n`;
-                exportContent += `--- Color Palette ---\n`;
-                if (currentPalette.length > 0) {
-                    currentPalette.forEach((color, index) => {
-                        exportContent += `Color ${index + 1}:\n`;
-                        exportContent += `  Hex: ${color.hex}\n`;
-                        exportContent += `  RGB: ${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]}\n\n`;
-                    });
-                } else {
-                    exportContent += `No color palette extracted yet.\n\n`;
-                }
-                
-                exportContent += "--- Skin Tone Analysis ---\n";
-                exportContent += currentSkinToneAnalysisResult.replace(/<strong>(.*?)<\/strong>/g, '$1').replace(/<br>/g, '\n') + "\n\n";
-
-                exportContent += currentSeasonAnalysisResult.replace(/<strong>(.*?)<\/strong>/g, '$1') + "\n\n";
-
-
-                const blob = new Blob([exportContent], { type: 'text/plain' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'color_palette_results.txt';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(a.href);
+                let content = `Color Palette Results\nDate: ${new Date().toLocaleString()}\n\n--- Color Palette ---\n`;
+                if(currentPalette.length > 0) content += currentPalette.map((c,i) => `Color ${i+1}:\n  Hex: ${c.hex}\n  RGB: ${c.rgb.join(', ')}\n`).join('\n');
+                else content += 'No palette extracted.';
+                const blob = new Blob([content], { type: 'text/plain' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'color_palette_results.txt';
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
             }
 
             function applyGeneralSettings() {
-                const root = document.documentElement;
-                generalSettingsInputs.forEach(input => {
-                    const variableName = '--' + input.id;
-                    let value = input.value;
-                    if (input.type === 'number' && !input.id.includes('in-frame-ui-scale')) {
-                        value += 'px';
-                    }
-                    root.style.setProperty(variableName, value);
+                document.querySelectorAll('#settings-panel input, #settings-panel select').forEach(input => {
+                    const value = input.type === 'number' && !input.id.includes('in-frame-ui-scale') ? input.value + 'px' : input.value;
+                    document.documentElement.style.setProperty('--' + input.id, value);
                 });
                 saveSettings();
             }
 
             function resetSettingsToDefault() {
-                const root = document.documentElement;
-                for (const id in defaultSettings) {
-                    const value = defaultSettings[id];
-                    const input = document.getElementById(id);
-                    if (input) {
-                        if (input.type === 'checkbox') {
-                            input.checked = (value === 'true');
-                        } else {
-                            input.value = value;
-                        }
-                        let cssValue = value;
-                        if (input.type === 'number' && !id.includes('in-frame-ui-scale')) {
-                            cssValue += 'px';
-                        }
-                        root.style.setProperty('--' + id, cssValue);
-                    }
-                }
-                saveSettings();
-                if (isDarkTheme) {
-                    toggleTheme();
-                }
+                isDarkTheme = false;
+                document.body.classList.remove('dark-theme');
+                themeToggleButton.textContent = 'Light';
+                
+                for (const id in defaultSettings) { const input = getEl(id); if (input) input.value = defaultSettings[id]; }
+                
+                // Reset Palette Extraction Settings sliders/numbers
+                numColorsInput.value = defaultPaletteSettings['num-colors'];
+                numColorsNumInput.value = defaultPaletteSettings['num-colors'];
+                showAllColorsInput.value = defaultPaletteSettings['show-all-colors'];
+                showAllColorsNumInput.value = defaultPaletteSettings['show-all-colors'];
+                sampleSizeInput.value = defaultPaletteSettings['sample-size'];
+                sampleSizeNumInput.value = defaultPaletteSettings['sample-size'];
+
+                applyGeneralSettings();
             }
 
             function saveSettings() {
-                const settings = {};
-                document.querySelectorAll('input, select').forEach(el => {
-                    if (el.id) settings[el.id] = el.type === 'checkbox' ? el.checked : el.value;
-                });
-                settings.isDarkTheme = isDarkTheme;
+                const settings = { isDarkTheme };
+                document.querySelectorAll('input, select').forEach(el => { if (el.id) settings[el.id] = el.value; });
                 localStorage.setItem('colorPaletteExtractorSettings', JSON.stringify(settings));
             }
 
             function loadSettings() {
                 const settings = JSON.parse(localStorage.getItem('colorPaletteExtractorSettings'));
                 if (settings) {
-                    document.querySelectorAll('input, select').forEach(el => {
-                        if (el.id && settings[el.id] !== undefined) {
-                            if (el.type === 'checkbox') el.checked = settings[el.id];
-                            else el.value = settings[el.id];
-                        }
-                    });
                     isDarkTheme = settings.isDarkTheme || false;
                     document.body.classList.toggle('dark-theme', isDarkTheme);
                     themeToggleButton.textContent = isDarkTheme ? 'Dark' : 'Light';
-                } else {
-                     hairColorSelect.value = defaultSettings['hair-color-select'];
-                     eyeColorSelect.value = defaultSettings['eye-color-select'];
+                    const theme = isDarkTheme ? {...defaultSettings, ...darkThemeSettings} : defaultSettings;
+                    document.querySelectorAll('input, select').forEach(el => {
+                        if (el.id) el.value = settings[el.id] || theme[el.id] || defaultPaletteSettings[el.id] || el.value;
+                    });
                 }
-
-                isManualLayoutEnabled = true; 
-                mainContainer.classList.add('side-by-side-layout');
-                paletteAnalysisPanel.style.display = 'block';
-                isPalettePanelManuallyHidden = false;
+                isManualLayoutEnabled = true; mainContainer.classList.add('side-by-side-layout');
+                paletteAnalysisPanel.style.display = 'block'; isPalettePanelManuallyHidden = false;
                 updateLayoutButtonText();
             }
 
-            function togglePanel(panelToToggle, forceShow = false) {
-                if (panelToToggle === settingsPanel) {
-                    if (settingsPanel.style.display === 'block' && !forceShow) {
-                        settingsPanel.style.display = 'none';
-                    } else {
-                        settingsPanel.style.display = 'block';
-                    }
-                } else if (panelToToggle === paletteAnalysisPanel) {
-                    if (mainContainer.classList.contains('side-by-side-layout')) {
-                        if (forceShow) {
-                            paletteAnalysisPanel.style.display = 'block';
-                            isPalettePanelManuallyHidden = false;
-                        } else {
-                            if (paletteAnalysisPanel.style.display === 'block') {
-                                paletteAnalysisPanel.style.display = 'none';
-                                isPalettePanelManuallyHidden = true;
-                            } else {
-                                paletteAnalysisPanel.style.display = 'block';
-                                isPalettePanelManuallyHidden = false;
-                            }
-                        }
-                    } else {
-                        if (paletteAnalysisPanel.style.display === 'block' && !forceShow) {
-                            paletteAnalysisPanel.style.display = 'none';
-                            isPalettePanelManuallyHidden = true;
-                        } else {
-                            paletteAnalysisPanel.style.display = 'block';
-                            isPalettePanelManuallyHidden = false;
-                        }
-                    }
-                }
-            }
-
-
-            function closePanelsOnClickOutside(event) {
-                if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT') || isKeyboardOpen) {
-                    return;
-                }
-
-                if (settingsPanel.style.display === 'block' && !settingsPanel.contains(event.target) && event.target !== settingsButton) {
-                    settingsPanel.style.display = 'none';
-                }
-                
-                if (!mainContainer.classList.contains('side-by-side-layout') &&
-                    paletteAnalysisPanel.style.display === 'block' &&
-                    !paletteAnalysisPanel.contains(event.target) &&
-                    event.target !== paletteSettingsButton &&
-                    event.target !== analyzeButton &&
-                    event.target !== pickColorButton &&
-                    event.target !== pickSkinToneButton
-                ) {
-                    paletteAnalysisPanel.style.display = 'none';
+            function togglePanel(panel, forceShow = false) {
+                panel.style.display = (panel.style.display==='block' && !forceShow) ? 'none' : 'block';
+                if (panel === paletteAnalysisPanel && panel.style.display === 'none') {
                     isPalettePanelManuallyHidden = true;
                 }
-
-                if (customColorPanel.style.display === 'block' && !customColorPanel.contains(event.target) && event.target !== customColorButton) {
-                    customColorPanel.style.display = 'none';
-                }
-
-                if (codeInputPanel.style.display === 'block' && !codeInputPanel.contains(event.target) && event.target !== codeInputButton) {
-                    codeInputPanel.style.display = 'none';
-                }
             }
 
-            function toggleManualLayout() {
-                isManualLayoutEnabled = !isManualLayoutEnabled;
-                if (isManualLayoutEnabled) {
-                    mainContainer.classList.add('side-by-side-layout');
-                    paletteAnalysisPanel.style.display = 'block';
-                    paletteAnalysisPanel.style.transform = 'translate3d(0, 0, 0)';
-                    dragState.xOffset = 0;
-                    dragState.yOffset = 0;
-                    isPalettePanelManuallyHidden = false;
-                } else {
-                    mainContainer.classList.remove('side-by-side-layout');
-                    if (paletteAnalysisPanel.style.display === 'block' && !isKeyboardOpen) {
-                         paletteAnalysisPanel.style.display = 'none';
-                         isPalettePanelManuallyHidden = true;
-                    }
-                    paletteAnalysisPanel.style.transform = 'none';
-                    dragState.xOffset = 0;
-                    dragState.yOffset = 0;
-                }
-                updateLayoutButtonText();
+            function closePanelsOnClickOutside(e) {
+                if (isKeyboardOpen || (document.activeElement && ['INPUT','SELECT'].includes(document.activeElement.tagName))) return;
+                if (settingsPanel.style.display==='block' && !settingsPanel.contains(e.target) && e.target!==settingsButton) settingsPanel.style.display='none';
+                if (!mainContainer.classList.contains('side-by-side-layout') && paletteAnalysisPanel.style.display==='block' && !paletteAnalysisPanel.contains(e.target) && e.target!==paletteSettingsButton && e.target!==analyzeButton && e.target!==pickColorButton) { paletteAnalysisPanel.style.display='none'; isPalettePanelManuallyHidden=true; }
+                if (customColorPanel.style.display==='block' && !customColorPanel.contains(e.target) && e.target!==customColorButton) customColorPanel.style.display='none';
+                if (codeInputPanel.style.display==='block' && !codeInputPanel.contains(e.target) && e.target!==codeInputButton) codeInputPanel.style.display='none';
             }
 
-            function updateLayoutButtonText() {
-                layoutButton.textContent = isManualLayoutEnabled ? 'Layout: Side-by-Side' : 'Layout: Stacked';
-            }
-
+            function toggleManualLayout() { isManualLayoutEnabled = !isManualLayoutEnabled; checkLayout(); }
+            function updateLayoutButtonText() { layoutButton.textContent = isManualLayoutEnabled ? 'Layout: Side-by-Side' : 'Layout: Stacked'; }
             function checkLayout() {
-                if (isManualLayoutEnabled) {
-                    mainContainer.classList.add('side-by-side-layout');
-                    if (!isPalettePanelManuallyHidden) {
-                        paletteAnalysisPanel.style.display = 'block';
-                    }
-                    updateLayoutButtonText();
-                    return;
-                }
-
-                const shouldBeSideBySideBasedOnViewport = window.innerWidth >= 992 || (window.innerWidth >= 768 && window.matchMedia("(orientation: landscape)").matches);
-
-                if (shouldBeSideBySideBasedOnViewport) {
-                    mainContainer.classList.add('side-by-side-layout');
-                    if (!isPalettePanelManuallyHidden) {
-                        paletteAnalysisPanel.style.display = 'block';
-                    }
-                } else {
-                    mainContainer.classList.remove('side-by-side-layout');
-                    if (paletteAnalysisPanel.style.display === 'block' && !isKeyboardOpen) {
-                         paletteAnalysisPanel.style.display = 'none';
-                         isPalettePanelManuallyHidden = true;
-                    }
-                }
-                if (!mainContainer.classList.contains('side-by-side-layout')) {
-                    paletteAnalysisPanel.style.transform = 'none';
-                    dragState.xOffset = 0;
-                    dragState.yOffset = 0;
-                }
+                const shouldBeSide = isManualLayoutEnabled || window.innerWidth >= 992 || (window.innerWidth >= 768 && window.matchMedia("(orientation: landscape)").matches);
+                mainContainer.classList.toggle('side-by-side-layout', shouldBeSide);
+                if (shouldBeSide) { if (!isPalettePanelManuallyHidden) paletteAnalysisPanel.style.display='block'; }
+                else { if (paletteAnalysisPanel.style.display==='block') {paletteAnalysisPanel.style.display='none';isPalettePanelManuallyHidden=true;} paletteAnalysisPanel.style.transform='none';dragState.xOffset=0;dragState.yOffset=0; }
                 updateLayoutButtonText();
             }
 
             function toggleFullscreen() {
-                const isFullscreen = frame.classList.toggle('fullscreen-active');
-                
-                if (isFullscreen) {
-                    frame._originalParent = frame.parentNode;
-                    frame._originalNextSibling = frame.nextSibling;
-                    frame._originalPosition = frame.style.position || '';
-                    frame._originalZIndex = frame.style.zIndex || '';
-                    
-                    document.body.appendChild(frame);
-                    
-                    frame.style.position = 'fixed';
-                    frame.style.zIndex = '9999';
-                    frame.style.top = '0';
-                    frame.style.left = '0';
-                    frame.style.width = '100vw';
-                    frame.style.height = '100vh';
-                    frame.style.margin = '0';
-                    frame.style.padding = '0';
-                    frame.style.border = 'none';
-                    frame.style.resize = 'none';
-                    
-                    imageDisplay.style.width = '100%';
-                    imageDisplay.style.height = '100%';
-                    imageDisplay.style.overflow = 'hidden';
-                } else {
-                    if (frame._originalParent) {
-                        if (frame._originalNextSibling) {
-                            frame._originalParent.insertBefore(frame, frame._originalNextSibling);
-                        } else {
-                            frame._originalParent.appendChild(frame);
-                        }
-                    }
-                    
-                    frame.style.position = frame._originalPosition;
-                    frame.style.zIndex = frame._originalZIndex;
-                    frame.style.top = '';
-                    frame.style.left = '';
-                    frame.style.width = '';
-                    frame.style.height = '';
-                    frame.style.margin = '';
-                    frame.style.padding = '';
-                    frame.style.border = '';
-                    frame.style.resize = '';
-                    
-                    imageDisplay.style.width = '';
-                    imageDisplay.style.height = '';
-                    imageDisplay.style.overflow = '';
-                }
-                
-                fullscreenButton.textContent = isFullscreen ? 'Exit' : '⛶';
-                fullscreenBottomLeftControls.style.display = isFullscreen ? 'flex' : 'none';
-                settingsPanel.style.display = 'none';
-                customColorPanel.style.display = 'none';
-                codeInputPanel.style.display = 'none';
-                if (!mainContainer.classList.contains('side-by-side-layout')) {
-                    paletteAnalysisPanel.style.display = 'none';
-                    isPalettePanelManuallyHidden = true;
-                }
+                const isFs = frame.classList.toggle('fullscreen-active');
+                if (isFs) { frame._ogParent = frame.parentNode; frame._ogSibling = frame.nextSibling; document.body.appendChild(frame); }
+                else if (frame._ogParent) { frame._ogParent.insertBefore(frame, frame._ogSibling || null); }
+                frame.style.cssText = isFs ? 'position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;margin:0;padding:0;border:none;resize:none;' : '';
+                fullscreenButton.textContent = isFs ? 'Exit' : '⛶'; fullscreenBottomLeftControls.style.display = isFs ? 'flex' : 'none';
+                [settingsPanel, customColorPanel, codeInputPanel].forEach(p => p.style.display = 'none');
                 document.querySelectorAll('.color-location-indicator').forEach(el => el.remove());
-                applyGeneralSettings();
             }
             
-            function getTranslateXY(elm) {
-                const style = window.getComputedStyle(elm);
-                const matrix = new DOMMatrixReadOnly(style.transform);
-                return { x: matrix.m41, y: matrix.m42 };
-            }
-
             function dragStart(e) {
-                if (!mainContainer.classList.contains('side-by-side-layout') || paletteAnalysisPanel.style.display === 'none') return;
-
-                const currentTransform = getTranslateXY(paletteAnalysisPanel);
-                dragState.xOffset = currentTransform.x;
-                dragState.yOffset = currentTransform.y;
-
-                dragState.initialX = e.type === 'touchstart' ? e.touches[0].clientX - dragState.xOffset : e.clientX - dragState.xOffset;
-                dragState.initialY = e.type === 'touchstart' ? e.touches[0].clientY - dragState.yOffset : e.clientY - dragState.yOffset;
-
-                if (e.target === dragHandle) {
-                    dragState.active = true;
-                    document.body.style.userSelect = 'none';
-                    document.body.style.cursor = 'grabbing';
-                    document.addEventListener('mouseup', dragEnd);
-                    document.addEventListener('touchend', dragEnd);
-                    document.addEventListener('mousemove', drag);
-                    document.addEventListener('touchmove', drag);
-                }
+                if (!mainContainer.classList.contains('side-by-side-layout') || e.target !== dragHandle) return;
+                const transform = new DOMMatrixReadOnly(window.getComputedStyle(paletteAnalysisPanel).transform);
+                dragState.xOffset = transform.m41; dragState.yOffset = transform.m42;
+                dragState.initialX = (e.type === 'touchstart' ? e.touches[0].clientX : e.clientX) - dragState.xOffset;
+                dragState.initialY = (e.type === 'touchstart' ? e.touches[0].clientY : e.clientY) - dragState.yOffset;
+                dragState.active = true; document.body.style.cursor = 'grabbing';
+                document.addEventListener('mouseup', dragEnd); document.addEventListener('touchend', dragEnd);
+                document.addEventListener('mousemove', drag); document.addEventListener('touchmove', drag);
             }
-            
-            function dragEnd(e) {
-                dragState.initialX = dragState.currentX;
-                dragState.initialY = dragState.currentY;
-                dragState.active = false;
-                document.body.style.userSelect = '';
-                document.body.style.cursor = '';
-                document.removeEventListener('mouseup', dragEnd);
-                document.removeEventListener('touchend', dragEnd);
-                document.removeEventListener('mousemove', drag);
-                document.removeEventListener('touchmove', drag);
-            }
-            
+            function dragEnd() { dragState.active=false; document.body.style.cursor=''; document.removeEventListener('mouseup',dragEnd); document.removeEventListener('touchend',dragEnd); document.removeEventListener('mousemove',drag); document.removeEventListener('touchmove',drag); }
             function drag(e) {
-                if (dragState.active) {
-                    e.preventDefault();
-                    let clientX, clientY;
-                    if (e.type === 'touchmove') {
-                        clientX = e.touches[0].clientX;
-                        clientY = e.touches[0].clientY;
-                    } else {
-                        clientX = e.clientX;
-                        clientY = e.clientY;
-                    }
-                    dragState.currentX = clientX - dragState.initialX;
-                    dragState.currentY = clientY - dragState.initialY;
-
-                    paletteAnalysisPanel.style.transform = `translate3d(${dragState.currentX}px, ${dragState.currentY}px, 0)`;
-                }
+                if (!dragState.active) return;
+                e.preventDefault();
+                const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                paletteAnalysisPanel.style.transform = `translate3d(${clientX-dragState.initialX}px, ${clientY-dragState.initialY}px, 0)`;
             }
 
-            function toggleEyedropper(forSkinTone) {
-                if (!originalImage || !originalImage.naturalWidth) {
-                    alert("Please upload an image first to use the color picker.");
-                    return;
-                }
-
-                if (forSkinTone) {
-                    isPickingSkinTone = !isPickingSkinTone;
-                    isPickingColor = false;
-                    pickColorButton.textContent = "Select";
-                } else {
-                    isPickingColor = !isPickingColor;
-                    isPickingSkinTone = false;
-                    pickSkinToneButton.textContent = "Pick Skin Tone";
-                }
-
-                if (isPickingColor || isPickingSkinTone) {
-                    if (isPickingColor) pickColorButton.textContent = "Exit Pick";
-                    if (isPickingSkinTone) pickSkinToneButton.textContent = "Exit Pick";
-
-                    frame.classList.add('eyedropper-active');
+            function toggleEyedropper() {
+                if (!originalImage) { alert("Please upload an image first."); return; }
+                isPickingColor = !isPickingColor;
+                pickColorButton.textContent = isPickingColor ? "Exit Pick" : "Select";
+                frame.classList.toggle('eyedropper-active', isPickingColor);
+                if (isPickingColor) {
                     hiddenCanvas.width = originalImage.naturalWidth;
                     hiddenCanvas.height = originalImage.naturalHeight;
                     hiddenCtx.drawImage(originalImage, 0, 0);
-                    magnifier.style.display = 'block';
-                    eyedropperCrosshair.style.display = 'block'; 
-                } else {
-                    pickColorButton.textContent = "Select";
-                    pickSkinToneButton.textContent = "Pick Skin Tone";
-                    frame.classList.remove('eyedropper-active');
-                    magnifier.style.display = 'none';
-                    eyedropperCrosshair.style.display = 'none'; 
-                    hideMagnifier();
-                    document.querySelectorAll('.color-location-indicator').forEach(el => el.remove());
-                }
+                    [magnifier, eyedropperCrosshair].forEach(el => el.style.display = 'block');
+                } else hideMagnifier();
             }
 
             function handleEyedropperMove(e) {
-                if (!(isPickingColor || isPickingSkinTone) || !originalImage || !originalImage.naturalWidth) return;
-
+                if (!isPickingColor) return;
                 e.preventDefault();
-
-                let clientX, clientY;
-                if (e.type.startsWith('touch')) {
-                    if (e.touches.length === 0) return;
-                    clientX = e.touches[0].clientX;
-                    clientY = e.touches[0].clientY;
-                } else {
-                    clientX = e.clientX;
-                    clientY = e.clientY;
-                }
-
-                eyedropperCrosshair.style.left = `${clientX}px`;
-                eyedropperCrosshair.style.top = `${clientY}px`;
-
+                let clientX = e.type.startsWith('touch')?e.touches[0].clientX:e.clientX, clientY = e.type.startsWith('touch')?e.touches[0].clientY:e.clientY;
+                eyedropperCrosshair.style.left = `${clientX}px`; eyedropperCrosshair.style.top = `${clientY}px`;
                 const imgRect = uploadedImage.getBoundingClientRect();
-                
-                let imgX = clientX - imgRect.left;
-                let imgY = clientY - imgRect.top;
-
-                const imgNaturalWidth = originalImage.naturalWidth;
-                const imgNaturalHeight = originalImage.naturalHeight;
-                const imgAspectRatio = imgNaturalWidth / imgNaturalHeight;
-                const displayAspectRatio = imgRect.width / imgRect.height;
-
-                let effectiveImgWidth, effectiveImgHeight;
-                let offsetX = 0, offsetY = 0;
-
-                if (displayAspectRatio > imgAspectRatio) {
-                    effectiveImgHeight = imgRect.height;
-                    effectiveImgWidth = imgRect.height * imgAspectRatio;
-                    offsetX = (imgRect.width - effectiveImgWidth) / 2;
-                } else {
-                    effectiveImgWidth = imgRect.width;
-                    effectiveImgHeight = imgRect.width / imgAspectRatio;
-                    offsetY = (imgRect.height - effectiveImgHeight) / 2;
-                }
-
-                const scaledX = (imgX - offsetX) * (imgNaturalWidth / effectiveImgWidth);
-                const scaledY = (imgY - offsetY) * (imgNaturalHeight / effectiveImgHeight);
-
-                const pixelX = Math.max(0, Math.min(Math.floor(scaledX), imgNaturalWidth - 1));
-                const pixelY = Math.max(0, Math.min(Math.floor(scaledY), imgNaturalHeight - 1));
-
-                const pixelData = hiddenCtx.getImageData(pixelX, pixelY, 1, 1).data;
-                const colorRgb = [pixelData[0], pixelData[1], pixelData[2]];
-                const colorHex = rgbToHex(colorRgb[0], colorRgb[1], colorRgb[2]);
-
-                magnifierColorDisplay.style.backgroundColor = `rgb(${colorRgb.join(',')})`;
-                magnifierHexCode.textContent = colorHex;
-                magnifierRgbCode.textContent = `RGB(${colorRgb.join(',')})`;
-                magnifierInfo.style.backgroundColor = `rgba(${colorRgb.join(',')}, 0.85)`;
-                magnifierInfo.style.color = getContrastTextColor(colorRgb[0], colorRgb[1], colorRgb[2]);
-
-
-                const zoomFactor = 2;
-                magnifierCanvas.width = magnifier.offsetWidth;
-                magnifierCanvas.height = magnifier.offsetHeight - magnifierInfo.offsetHeight;
-
+                const {naturalWidth:w, naturalHeight:h} = originalImage;
+                const aspectNat = w/h, aspectDisp = imgRect.width/imgRect.height;
+                const scale = aspectDisp > aspectNat ? imgRect.height/h : imgRect.width/w;
+                const xOff = (imgRect.width-w*scale)/2, yOff = (imgRect.height-h*scale)/2;
+                const px = Math.floor((clientX-imgRect.left-xOff)/scale), py = Math.floor((clientY-imgRect.top-yOff)/scale);
+                const [r,g,b] = hiddenCtx.getImageData(px,py,1,1).data;
+                magnifierColorDisplay.style.backgroundColor = `rgb(${r},${g},${b})`;
+                magnifierHexCode.textContent = rgbToHex(r,g,b);
+                magnifierInfo.style.color = (r*0.299+g*0.587+b*0.114)>186 ? 'black' : 'white';
                 magnifierCtx.imageSmoothingEnabled = false;
-                magnifierCtx.clearRect(0, 0, magnifierCanvas.width, magnifierCanvas.height);
-
-                const sourceSize = magnifierCanvas.width / zoomFactor;
-                const drawX = pixelX - sourceSize / 2;
-                const drawY = pixelY - sourceSize / 2;
-
-                magnifierCtx.drawImage(
-                    hiddenCanvas,
-                    drawX, drawY, sourceSize, sourceSize,
-                    0, 0, magnifierCanvas.width, magnifierCanvas.height
-                );
-
-                magnifier.style.left = `${clientX}px`;
-                magnifier.style.top = `${clientY}px`;
-                magnifier.style.display = 'block';
+                magnifierCtx.clearRect(0,0,magnifierCanvas.width,magnifierCanvas.height);
+                magnifierCtx.drawImage(hiddenCanvas, px-magnifierCanvas.width/4, py-magnifierCanvas.height/4, magnifierCanvas.width/2, magnifierCanvas.height/2, 0,0,magnifierCanvas.width,magnifierCanvas.height);
+                magnifier.style.left = `${clientX}px`; magnifier.style.top = `${clientY}px`;
             }
 
             function handleEyedropperConfirmSelection(e) {
-                if (!(isPickingColor || isPickingSkinTone) || !originalImage) return;
-
-                if (e.type === 'mouseup' && e.button !== 0) return;
-
+                if (!isPickingColor || (e.type==='mouseup'&&e.button!==0)) return;
                 const imgRect = uploadedImage.getBoundingClientRect();
-                
-                let clientX, clientY;
-                if (e.type.startsWith('touch')) {
-                    if (e.changedTouches.length === 0) return;
-                    clientX = e.changedTouches[0].clientX;
-                    clientY = e.changedTouches[0].clientY;
-                } else {
-                    clientX = e.clientX;
-                    clientY = e.clientY;
-                }
-
-                let imgX = clientX - imgRect.left;
-                let imgY = clientY - imgRect.top;
-
-                const imgNaturalWidth = originalImage.naturalWidth;
-                const imgNaturalHeight = originalImage.naturalHeight;
-                const imgAspectRatio = imgNaturalWidth / imgNaturalHeight;
-                const displayAspectRatio = imgRect.width / imgRect.height;
-
-                let effectiveImgWidth, effectiveImgHeight;
-                let offsetX = 0, offsetY = 0;
-
-                if (displayAspectRatio > imgAspectRatio) {
-                    effectiveImgHeight = imgRect.height;
-                    effectiveImgWidth = imgRect.height * imgAspectRatio;
-                    offsetX = (imgRect.width - effectiveImgWidth) / 2;
-                } else {
-                    effectiveImgWidth = imgRect.width;
-                    effectiveImgHeight = imgRect.width / imgAspectRatio;
-                    offsetY = (imgRect.height - effectiveImgHeight) / 2;
-                }
-
-                const scaledX = (imgX - offsetX) * (imgNaturalWidth / effectiveImgWidth);
-                const scaledY = (imgY - offsetY) * (imgNaturalHeight / effectiveImgHeight);
-
-                const pixelX = Math.max(0, Math.min(Math.floor(scaledX), imgNaturalWidth - 1));
-                const pixelY = Math.max(0, Math.min(Math.floor(scaledY), imgNaturalHeight - 1));
-                
-                const groupSize = parseInt(colorGroupSizeInput.value, 10);
-                const halfGroup = Math.floor(groupSize / 2);
-
-                const pixelsInGroup = [];
-                let centerRgb = [0,0,0];
-
-                for (let y = -halfGroup; y <= halfGroup; y++) {
-                    for (let x = -halfGroup; x <= halfGroup; x++) {
-                        const currentX = pixelX + x;
-                        const currentY = pixelY + y;
-
-                        if (currentX >= 0 && currentX < imgNaturalWidth && currentY >= 0 && currentY < imgNaturalHeight) {
-                            const pixelData = hiddenCtx.getImageData(currentX, currentY, 1, 1).data;
-                            const rgb = [pixelData[0], pixelData[1], pixelData[2]];
-                            pixelsInGroup.push(rgb);
-                            if (x === 0 && y === 0) {
-                                centerRgb = rgb;
-                            }
-                        }
-                    }
-                }
-
-                const dominantRgb = calculateMeanColor(pixelsInGroup);
-                const dominantHex = rgbToHex(dominantRgb[0], dominantRgb[1], dominantRgb[2]);
-
-                const pickedColor = {
-                    rgb: dominantRgb,
-                    hex: dominantHex,
-                    hsl: rgbToHsl(dominantRgb[0], dominantRgb[1], dominantRgb[2]),
-                    cmyk: rgbToCmyk(dominantRgb[0], dominantRgb[1], dominantRgb[2])
-                };
-
-                if (isPickingColor) {
-                    const isDuplicate = currentPalette.some(color => color.hex === pickedColor.hex);
-                    if (!isDuplicate) {
-                        currentPalette.push(pickedColor);
-                        currentPalette.sort((a, b) => {
-                            const brightnessA = (a.rgb[0] * 299 + a.rgb[1] * 587 + a.rgb[2] * 114) / 1000;
-                            const brightnessB = (b.rgb[0] * 299 + b.rgb[1] * 587 + b.rgb[2] * 114) / 1000;
-                            return brightnessB - brightnessA;
-                        });
-                        displayPalette(currentPalette);
-                    }
-                }
-                
-                if (isPickingSkinTone) {
-                    analyzeSkinTone(pixelsInGroup, centerRgb);
-                }
-
-                toggleEyedropper(false);
+                let clientX = e.type.startsWith('touch')?e.changedTouches[0].clientX:e.clientX, clientY = e.type.startsWith('touch')?e.changedTouches[0].clientY:e.clientY;
+                const {naturalWidth:w, naturalHeight:h} = originalImage;
+                const aspectNat = w/h, aspectDisp = imgRect.width/imgRect.height;
+                const scale = aspectDisp > aspectNat ? imgRect.height/h : imgRect.width/w;
+                const xOff = (imgRect.width-w*scale)/2, yOff = (imgRect.height-h*scale)/2;
+                const px = Math.floor((clientX-imgRect.left-xOff)/scale), py = Math.floor((clientY-imgRect.top-yOff)/scale);
+                const rgb = [...hiddenCtx.getImageData(px,py,1,1).data].slice(0,3);
+                const color = {rgb, hex: rgbToHex(...rgb), hsl: rgbToHsl(...rgb), cmyk: rgbToCmyk(...rgb)};
+                addColorToPalette(color);
+                analyzeColorUndertone(color.rgb);
+                toggleEyedropper();
             }
 
             function hideMagnifier() {
-                magnifier.style.display = 'none';
-                eyedropperCrosshair.style.display = 'none'; 
-                magnifierHexCode.textContent = '';
-                magnifierRgbCode.textContent = '';
-                magnifierColorDisplay.style.backgroundColor = '';
+                [magnifier, eyedropperCrosshair].forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.color-location-indicator').forEach(el => el.remove());
             }
             
-            function rgbToHex(r, g, b) {
-                return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
-            }
-            
-            function hexToRgb(hex) {
-                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                return result ? [
-                    parseInt(result[1], 16),
-                    parseInt(result[2], 16),
-                    parseInt(result[3], 16)
-                ] : null;
-            }
-
-            function rgbToHsl(r, g, b) {
-                r /= 255;
-                g /= 255;
-                b /= 255;
-
-                const max = Math.max(r, g, b);
-                const min = Math.min(r, g, b);
-                let h, s, l = (max + min) / 2;
-
-                if (max === min) {
-                    h = s = 0;
-                } else {
-                    const d = max - min;
-                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                    switch (max) {
-                        case r:
-                            h = (g - b) / d + (g < b ? 6 : 0);
-                            break;
-                        case g:
-                            h = (b - r) / d + 2;
-                            break;
-                        case b:
-                            h = (r - g) / d + 4;
-                            break;
-                    }
-                    h /= 6;
-                }
-
-                return {
-                    h: h * 360,
-                    s: s * 100,
-                    l: l * 100
-                };
-            }
-
-            function hslToRgb(h, s, l) {
-                h /= 360;
-                s /= 100;
-                l /= 100;
-                
-                let r, g, b;
-                
-                if (s === 0) {
-                    r = g = b = l;
-                } else {
-                    const hue2rgb = (p, q, t) => {
-                        if (t < 0) t += 1;
-                        if (t > 1) t -= 1;
-                        if (t < 1/6) return p + (q - p) * 6 * t;
-                        if (t < 1/2) return q;
-                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                        return p;
-                    };
-                    
-                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-                    const p = 2 * l - q;
-                    
-                    r = hue2rgb(p, q, h + 1/3);
-                    g = hue2rgb(p, q, h);
-                    b = hue2rgb(p, q, h - 1/3);
-                }
-                
-                return [
-                    Math.round(r * 255),
-                    Math.round(g * 255),
-                    Math.round(b * 255)
-                ];
-            }
-
-            function rgbToCmyk(r, g, b) {
-                let c = 1 - (r / 255);
-                let m = 1 - (g / 255);
-                let y = 1 - (b / 255);
-                let k = Math.min(c, Math.min(m, y));
-
-                c = (c - k) / (1 - k);
-                m = (m - k) / (1 - k);
-                y = (y - k) / (1 - k);
-
-                if (1 - k === 0) {
-                    c = 0; m = 0; y = 0;
-                } else if (isNaN(c) || isNaN(m) || isNaN(y)) {
-                    c = 0; m = 0; y = 0; k = 1;
-                }
-
-                return {
-                    c: c * 100,
-                    m: m * 100,
-                    y: y * 100,
-                    k: k * 100
-                };
-            }
-
-            function colorDistance(rgb1, rgb2) {
-                return Math.sqrt(
-                    Math.pow(rgb1[0] - rgb2[0], 2) +
-                    Math.pow(rgb1[1] - rgb2[1], 2) +
-                    Math.pow(rgb1[2] - rgb2[2], 2)
-                );
-            }
-
-            function calculateMeanColor(colorsArray) {
-                if (colorsArray.length === 0) return [0, 0, 0];
-                let rSum = 0, gSum = 0, bSum = 0;
-                for (const color of colorsArray) {
-                    rSum += color[0];
-                    gSum += color[1];
-                    bSum += color[2];
-                }
-                return [
-                    Math.round(rSum / colorsArray.length),
-                    Math.round(gSum / colorsArray.length),
-                    Math.round(bSum / colorsArray.length)
-                ];
-            }
-
-            function getLuminance(r, g, b) {
-                const a = [r, g, b].map(function (v) {
-                    v /= 255;
-                    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-                });
-                return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-            }
-            
-            function getContrastTextColor(r, g, b) {
-                const luminance = getLuminance(r, g, b);
-                return luminance > 0.5 ? 'black' : 'white';
-            }
+            function rgbToHex(r, g, b) { return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase(); }
+            function hexToRgb(hex) { const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return r ? [parseInt(r[1], 16), parseInt(r[2], 16), parseInt(r[3], 16)] : null; }
+            function rgbToHsl(r, g, b) { r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b);let h,s,l=(max+min)/2;if(max==min)h=s=0;else{const d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4}h/=6}return{h:h*360,s:s*100,l:l*100}}
+            function hslToRgb(h, s, l) { h/=360;s/=100;l/=100;let r,g,b;if(s===0)r=g=b=l;else{const hue2rgb=(p,q,t)=>{if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p};const q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q;r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3)}return[Math.round(r*255),Math.round(g*255),Math.round(b*255)]}
+            function rgbToCmyk(r, g, b) { let c=1-r/255,m=1-g/255,y=1-b/255,k=Math.min(c,m,y);if(k===1)return{c:0,m:0,y:0,k:100};c=(c-k)/(1-k);m=(m-k)/(1-k);y=(y-k)/(1-k);return{c:c*100,m:m*100,y:y*100,k:k*100}}
+            function colorDistance(rgb1, rgb2) { return Math.hypot(rgb1[0]-rgb2[0], rgb1[1]-rgb2[1], rgb1[2]-rgb2[2]); }
+            function calculateMeanColor(colors) { return colors.reduce((acc,c)=>[acc[0]+c[0],acc[1]+c[1],acc[2]+c[2]],[0,0,0]).map(sum=>Math.round(sum/colors.length)); }
         });
     </script>
 </body>
